@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<cinder>
+<block
+	name="Cinder-ARKit"
+	id="com.cinder.arkit"
+	author="Felix Faire"
+	summary="Basic Wrapper for Apple ARKit inspired by wdlindmeier's Cinder-Metal block"
+	git="https://github.com/felixfaire/Cinder-ARKit.git"
+	version="0.0"
+	>
+	<supports os="ios" />
+	
+	<sourcePattern>src/*.cpp</sourcePattern>
+	<sourcePattern>src/*.mm</sourcePattern>
+    <headerPattern>include/*.h</headerPattern>
+    
+    <includePath>include</includePath>
+    <includePath>src</includePath>
+	
+	<platform os="ios">
+        <framework sdk="true">ARKit.framework</framework>
+    </platform>
+	
+</block>
+</cinder>
