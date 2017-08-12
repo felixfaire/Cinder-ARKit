@@ -26,6 +26,8 @@
 #import "CinderARKit.h"
 #import "CinderARKitUtils.h"
 
+#include "cinder/gl/gl.h"
+
 using namespace ARKit;
 
 // Global instances of the session to bridge C++ and Obj C
@@ -44,6 +46,8 @@ Session::Session( Session::Format format )
     DBG_ASSERT(ciARKitSession == nullptr)
     
     ciARKitSession = this;
+    
+    mYCbCrToRGBProg = getYCbCrToRBGGlslProgram();
 
     if (ciARKitSessionImpl == nil)
     {
@@ -73,13 +77,32 @@ void Session::runConfiguration( TrackingConfiguration config )
 
 void Session::pause()
 {
+    mIsRunning = false;
     [ciARKitSessionImpl->mARSession pause];
 }
 
 void Session::addAnchorRelativeToCamera( vec3 offset )
 {
-    std::cout << "Adding anchor point" << std::endl;
     [ciARKitSessionImpl addAnchorWithxOffset:@(offset.x) yOffset:@(offset.y) zOffset:@(offset.z)];
+}
+
+void Session::drawRGBCaptureTexture( Area area )
+{
+    if (!mIsRunning)
+        return;
+    
+    const auto texY  = gl::Texture2d::create( mFrameYChannel );
+    const auto texCr = gl::Texture2d::create( mFrameCrChannel );
+    const auto texCb = gl::Texture2d::create( mFrameCbChannel );
+
+    gl::ScopedGlslProg glslProg( mYCbCrToRGBProg );
+    gl::ScopedTextureBind yScp( texY, 0 );
+    gl::ScopedTextureBind cbScp( texCb, 1 );
+    gl::ScopedTextureBind crScp( texCr, 2 );
+    mYCbCrToRGBProg->uniform( "u_YTex", 0 );
+    mYCbCrToRGBProg->uniform( "u_CbTex", 1 );
+    mYCbCrToRGBProg->uniform( "u_CrTex", 2 );
+    gl::drawSolidRect( area );
 }
 
 
@@ -100,22 +123,21 @@ void Session::addAnchorRelativeToCamera( vec3 offset )
 
 - (void)session:(ARSession*)session didUpdateFrame:(ARFrame*)frame
 {
+    ciARKitSession->mIsRunning = true;
+    
     // Update view matrix
     ciARKitSession->mViewMatrix = toMat4(matrix_invert(frame.camera.transform));
     
     // Update projection matrix
-    vec2 size = ciARKitSession->mViewSize;
+    vec2 size = ciARKitSession->mFormat.mViewSize;
     CGSize viewportSize = CGSizeMake(size.y, size.x);
     ciARKitSession->mProjectionMatrix = toMat4([frame.camera projectionMatrixForOrientation:UIInterfaceOrientationLandscapeRight
                                                                        viewportSize:viewportSize
                                                                              zNear:0.001
                                                                               zFar:1000]);
 
-
-    CVPixelBufferRef pixelBuffer = frame.capturedImage;
-
     // Capture pixel YCbCr
-    
+    CVPixelBufferRef pixelBuffer = frame.capturedImage;
     ciARKitSession->mFrameYChannel  = getChannelForCVPixelBuffer( pixelBuffer, 0 );
     ciARKitSession->mFrameCbChannel = getChannelForCVPixelBuffer( pixelBuffer, 1, 2, 0 );
     ciARKitSession->mFrameCrChannel = getChannelForCVPixelBuffer( pixelBuffer, 1, 2, 1 );

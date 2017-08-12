@@ -93,6 +93,54 @@ cinder::Channel8u getChannelForCVPixelBuffer( const CVPixelBufferRef& pixelBuffe
     return cinder::Channel8u( (int32_t)width, (int32_t)height, (int32_t)bytesPerRow, increment, data + offset );
 }
 
+static gl::GlslProgRef getYCbCrToRBGGlslProgram()
+{
+    std::string vert = R"(
+            #version 100
+            precision mediump float;
+
+            uniform mat4 ciModelViewProjection;
+
+            attribute vec4 ciPosition;
+            attribute vec2 ciTexCoord0;
+
+            varying vec2 v_TexCoord;
+
+            void main()
+            {
+                v_TexCoord = ciTexCoord0;
+                gl_Position = ciModelViewProjection * ciPosition;
+            }
+    )";
+    
+    std::string frag = R"(
+            #version 100
+            precision mediump float;
+    
+            uniform sampler2D u_YTex;
+            uniform sampler2D u_CbTex;
+            uniform sampler2D u_CrTex;
+    
+            varying vec2 v_TexCoord;
+
+            void main()
+            {
+                vec3 rgb = vec3( 0.0 );
+                
+                float y  = texture2D( u_YTex,  v_TexCoord ).r;
+                float cb = texture2D( u_CbTex, v_TexCoord ).r - 0.5;
+                float cr = texture2D( u_CrTex, v_TexCoord ).r - 0.5;
+
+                rgb.x = y + 1.402 * cr;
+                rgb.y = y -0.344 * cb - 0.714 * cr;
+                rgb.z = y + 1.772 * cb;
+                
+                gl_FragColor = vec4( rgb, 1.0 );
+            })";
+    
+    return gl::GlslProg::create( vert, frag );
+}
+
 } // namespace ARKit
 
 #endif /* CinderARKitUtils_h */

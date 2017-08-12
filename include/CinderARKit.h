@@ -65,8 +65,12 @@ public:
     public:
         Format(){}
         Format& configuration( TrackingConfiguration config ) { mConfiguration = config; return *this; }
+        Format& rgbCaptureEnabled( bool rgbEnabled ) { mRGBCaptureEnabled = rgbEnabled; return *this; }
+        Format& viewSize( vec2 viewSize ) { mViewSize = viewSize; return *this; }
         
         TrackingConfiguration mConfiguration = { WorldTrackingWithHorizontalPlaneDetection };
+        bool                  mRGBCaptureEnabled = true;
+        vec2                  mViewSize = vec2( 0.1f );
     };
     
     static SessionRef create( Format format = Format() );
@@ -86,28 +90,34 @@ public:
     
     /**  Sets the size and aspect ratio of the view to calculate the projection matrix
     */
-    void setViewSize( ivec2 newSize )   { mViewSize = newSize; }
+    void setViewSize( ivec2 newSize )   { mFormat.mViewSize = (vec2)newSize; }
 
     /**  Returns the luma texture for the current frame capture
     */
     gl::Texture2dRef getFrameLumaTexture()    { return gl::Texture2d::create( mFrameYChannel ); }
+    
+    /**  Draws the converted rgb capture to the desired area
+    */
+    void drawRGBCaptureTexture( Area area );
+    
 
     // Currently members are publically exposed to Obj C Implementation
     
     std::map<std::string, Anchor>       mAnchors;
     std::map<std::string, PlaneAnchor>  mPlaneAnchors;
     
-    cinder::Channel8u      mFrameYChannel;
-    cinder::Channel8u      mFrameCbChannel;
-    cinder::Channel8u      mFrameCrChannel;
+    Channel8u              mFrameYChannel;
+    Channel8u              mFrameCbChannel;
+    Channel8u              mFrameCrChannel;
 
     mat4                   mViewMatrix;
     mat4                   mProjectionMatrix;
     
-    vec2                   mViewSize = vec2(1.0f);
-    
     Format                 mFormat;
     
+    bool                    mIsRunning = false;
+    
+    gl::GlslProgRef        mYCbCrToRGBProg;
     
 };
 } // namespace ARKit
