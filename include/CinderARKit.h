@@ -22,16 +22,29 @@ class Session;
 typedef std::shared_ptr<Session> SessionRef;
 
 /**  An anchor point that will be tracked by ARKit*/
-struct Anchor
+class Anchor
 {
+public:
+    Anchor() {}
+    Anchor( mat4 transform )
+        : mTransform( transform ) {}
+    
     mat4           mTransform;
 };
 
 /**  An anchor point that includes plane position and extents*/
-struct PlaneAnchor : public Anchor
+class PlaneAnchor
 {
-    vec2 mCenter;
-    vec2 mExtents;
+public:
+    PlaneAnchor(){}
+    PlaneAnchor( mat4 transform, vec3 center, vec3 extent )
+        : mTransform( transform ),
+          mCenter( center ),
+          mExtent( extent ) {}
+    
+    mat4 mTransform;
+    vec3 mCenter;
+    vec3 mExtent;
 };
 
 class Session
@@ -81,7 +94,8 @@ public:
 
     // Currently members are publically exposed to Obj C Implementation
     
-    std::map<std::string, Anchor>  mAnchorMap;
+    std::map<std::string, Anchor>       mAnchors;
+    std::map<std::string, PlaneAnchor>  mPlaneAnchors;
     
     cinder::Surface8u      mCurrentFrame;
 

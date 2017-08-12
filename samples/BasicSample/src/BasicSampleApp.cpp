@@ -20,8 +20,10 @@ class BasicSampleApp : public App {
 
 void BasicSampleApp::setup()
 {
-    mARSession = ARKit::Session::create();
+    const auto fmt = ARKit::Session::Format().configuration( ARKit::Session::TrackingConfiguration::WorldTrackingWithHorizontalPlaneDetection );
+    mARSession = ARKit::Session::create( fmt );
     mARSession->setViewSize( getWindowSize() );
+    mARSession->run();
 }
 
 void BasicSampleApp::touchesBegan( TouchEvent event )
@@ -45,12 +47,26 @@ void BasicSampleApp::draw()
     gl::ScopedGlslProg glslProg( gl::getStockShader( gl::ShaderDef().color() ));
     gl::color( 1.0f, 1.0f, 1.0f );
     
-    for (const auto& a : mARSession->mAnchorMap)
+    for (const auto& a : mARSession->mAnchors)
     {
         gl::ScopedMatrices matScp;
         gl::setModelMatrix( a.second.mTransform );
         
         gl::drawCube( vec3(0.0f), vec3(0.02f) );
+    }
+    
+    gl::ScopedColor colScp;
+    
+    for (const auto& a : mARSession->mPlaneAnchors)
+    {
+        gl::ScopedMatrices matScp;
+        gl::setModelMatrix( a.second.mTransform );
+        gl::translate( a.second.mCenter );
+        gl::rotate( M_PI*0.5f, vec3(1,0,0) ); // Make it parallel with the ground
+        const float xRad = a.second.mExtent.x * 0.5f;
+        const float zRad = a.second.mExtent.z * 0.5f;
+        gl::color( 1.0f, 1.0f, 1.0f, 0.2f );
+        gl::drawSolidRect( Rectf( -xRad,-zRad, xRad, zRad ));
     }
 }
 

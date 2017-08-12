@@ -15,16 +15,16 @@
 #endif
 
 /**
-     Utils to convert between Metal objects and Cinder objects
+     Utils to convert between iOS metal vector types and glm types
 */
 
 // Conversions to simd types
-// Thanks to http://wdlindmeier.com/ !
+// By William Lindmeier http://wdlindmeier.com/
 
 namespace ARKit {
 
 template <typename T, typename U >
-const U static inline convert( const T & t )
+const U static inline convert( const T& t )
 {
     U tmp;
     memcpy(&tmp, &t, sizeof(U));
@@ -32,15 +32,10 @@ const U static inline convert( const T & t )
     return ret;
 }
 
-const matrix_float4x4 static inline toMtl( const glm::mat4 & mat )
-{
-    return convert<glm::mat4, matrix_float4x4>(mat);
-}
-
-const glm::mat4 static inline fromMtl( const matrix_float4x4 & mat )
-{
-    return convert<matrix_float4x4, glm::mat4>(mat);
-}
+const glm::mat4 static inline toMat4( const matrix_float4x4& mat ) { return convert<matrix_float4x4, glm::mat4>(mat); }
+const glm::vec4 static inline toVec4( const vector_float4& vec )   { return convert<vector_float4, glm::vec4>(vec); }
+const glm::vec3 static inline toVec3( const vector_float3& vec )   { return convert<vector_float3, glm::vec3>(vec); }
+const glm::vec2 static inline toVec2( const vector_float2& vec )   { return convert<vector_float2, glm::vec2>(vec); }
 
 static mat4 modelMatFromTransform( matrix_float4x4 transform )
 {
@@ -48,7 +43,7 @@ static mat4 modelMatFromTransform( matrix_float4x4 transform )
     // Flip Z axis to convert geometry from right handed to left handed
     coordinateSpaceTransform.columns[2].z = -1.0;
     matrix_float4x4 modelMat = matrix_multiply(transform, coordinateSpaceTransform);
-    return fromMtl(modelMat);
+    return toMat4( modelMat );
 }
 
 static const std::string getUidStringFromAnchor( ARAnchor* anchor )

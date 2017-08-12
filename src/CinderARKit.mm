@@ -106,43 +106,63 @@ void Session::addAnchorRelativeToCamera( vec3 offset )
 - (void)session:(ARSession*)session didUpdateFrame:(ARFrame*)frame
 {
     // Update view matrix
-    ciARKitSession->mViewMatrix = fromMtl(matrix_invert(frame.camera.transform));
+    ciARKitSession->mViewMatrix = toMat4(matrix_invert(frame.camera.transform));
     
     // Update projection matrix
     vec2 size = ciARKitSession->mViewSize;
     CGSize viewportSize = CGSizeMake(size.y, size.x);
-    ciARKitSession->mProjectionMatrix = fromMtl([frame.camera projectionMatrixForOrientation:UIInterfaceOrientationLandscapeRight
+    ciARKitSession->mProjectionMatrix = toMat4([frame.camera projectionMatrixForOrientation:UIInterfaceOrientationLandscapeRight
                                                                        viewportSize:viewportSize
                                                                              zNear:0.001
                                                                               zFar:1000]);
 
-    // Update capture image
-    CVPixelBufferRef pixelBuffer = frame.capturedImage;
-    uint8_t* data = (uint8_t*)CVPixelBufferGetBaseAddress( pixelBuffer );
-    mExposedFrameBytesPerRow = (int32_t)CVPixelBufferGetBytesPerRow( pixelBuffer );
-    mExposedFrameWidth = (int32_t)CVPixelBufferGetWidth( pixelBuffer );
-    mExposedFrameHeight = (int32_t)CVPixelBufferGetHeight( pixelBuffer );
-
-    ciARKitSession->mCurrentFrame = cinder::Surface8u( data, mExposedFrameWidth, mExposedFrameHeight, mExposedFrameBytesPerRow, cinder::SurfaceChannelOrder::BGRA );
+    // TODO: Update capture image
+//    CVPixelBufferRef pixelBuffer = frame.capturedImage;
+//    uint8_t* data = (uint8_t*)CVPixelBufferGetBaseAddress( pixelBuffer );
+//    mExposedFrameBytesPerRow = (int32_t)CVPixelBufferGetBytesPerRow( pixelBuffer );
+//    mExposedFrameWidth = (int32_t)CVPixelBufferGetWidth( pixelBuffer );
+//    mExposedFrameHeight = (int32_t)CVPixelBufferGetHeight( pixelBuffer );
+//
+//    ciARKitSession->mCurrentFrame = cinder::Surface8u( data, mExposedFrameWidth, mExposedFrameHeight, mExposedFrameBytesPerRow, cinder::SurfaceChannelOrder::BGRA );
 }
 
 // ===== ANCHOR HANDLING ===========================================================================================
 - (void)session:(ARSession *)session didAddAnchors:(NSArray<ARAnchor*>*)anchors
 {
     for (ARAnchor* anchor in anchors)
-        ciARKitSession->mAnchorMap[getUidStringFromAnchor( anchor )] = { fromMtl( anchor.transform ) };
+    {
+        if ([anchor isKindOfClass:[ARPlaneAnchor class]])
+        {
+            ARPlaneAnchor* pa = (ARPlaneAnchor*)anchor;
+            ciARKitSession->mPlaneAnchors[getUidStringFromAnchor( pa )] = PlaneAnchor( toMat4( pa.transform ), toVec3( pa.center ), toVec3( pa.extent ));
+        }
+        else
+        {
+            ciARKitSession->mAnchors[getUidStringFromAnchor( anchor )] = Anchor( toMat4( anchor.transform ));
+        }
+    }
 }
 
 - (void)session:(ARSession *)session didUpdateAnchors:(NSArray<ARAnchor*>*)anchors
 {
     for (ARAnchor* anchor in anchors)
-        ciARKitSession->mAnchorMap[getUidStringFromAnchor( anchor )] = { fromMtl( anchor.transform ) };
+    {
+        if ( [anchor isKindOfClass:[ARPlaneAnchor class]] )
+        {
+            ARPlaneAnchor* pa = (ARPlaneAnchor*)anchor;
+            ciARKitSession->mPlaneAnchors[getUidStringFromAnchor( pa )] = PlaneAnchor( toMat4( pa.transform ), toVec3( pa.center ), toVec3( pa.extent ));
+        }
+        else
+        {
+            ciARKitSession->mAnchors[getUidStringFromAnchor( anchor )] = Anchor( toMat4( anchor.transform ));
+        }
+    }
 }
 
 - (void)session:(ARSession *)session didRemoveAnchors:(NSArray<ARAnchor*>*)anchors
 {
     for (ARAnchor* anchor in anchors)
-        ciARKitSession->mAnchorMap.erase(getUidStringFromAnchor( anchor ));
+        ciARKitSession->mAnchors.erase( getUidStringFromAnchor( anchor ));
 }
 
 - (void)addAnchorWithxOffset:(NSNumber*)x yOffset:(NSNumber*)y zOffset:(NSNumber*)z;
