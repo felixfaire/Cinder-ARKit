@@ -11,51 +11,51 @@
 		0087D25512CD809F002CD69F /* CoreText.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 0087D25412CD809F002CD69F /* CoreText.framework */; };
 		00A66A361965AC8800B17EB3 /* Accelerate.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 00A66A351965AC8800B17EB3 /* Accelerate.framework */; };
 		00CFDF6B1138442D0091E310 /* CoreGraphics.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 00CFDF6A1138442D0091E310 /* CoreGraphics.framework */; };
-		0D7BE7A9F4154D12A37B9680 /* BasicViewProjectionApp.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 2657845179EA49418C7D5AA1 /* BasicViewProjectionApp.cpp */; };
-		125FCB93657447CD8BB605EB /* CinderApp_ios.png in Resources */ = {isa = PBXBuildFile; fileRef = 3DF69B4AE1CC456EAB19E281 /* CinderApp_ios.png */; };
 		1D60589F0D05DD5A006BFB54 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 1D30AB110D05D00D00671497 /* Foundation.framework */; };
 		1DF5F4E00D08C38300B7A737 /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 1DF5F4DF0D08C38300B7A737 /* UIKit.framework */; };
 		28FD15000DC6FC520079059D /* OpenGLES.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 28FD14FF0DC6FC520079059D /* OpenGLES.framework */; };
 		28FD15080DC6FC5B0079059D /* QuartzCore.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 28FD15070DC6FC5B0079059D /* QuartzCore.framework */; };
-		6ABB09729BFC4C999BE5F016 /* ARKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 86099AEBF71648AE9E6D65F4 /* ARKit.framework */; };
-		AE457B3B89E148B0B1BA65D4 /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = EF65B51FCD8843CEA9A24ACF /* Images.xcassets */; };
+		2D0E5CE007B241AB933A6627 /* LaunchScreen.xib in Resources */ = {isa = PBXBuildFile; fileRef = 288FC50233824748B935569A /* LaunchScreen.xib */; };
+		3050CF968FF4482F9EC0232B /* BasicSampleApp.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 0BBAB31322504E45B9359045 /* BasicSampleApp.cpp */; };
+		4E2F627740AC41A4B7925997 /* CinderApp_ios.png in Resources */ = {isa = PBXBuildFile; fileRef = CDDD27D4738C41F1B3907FAD /* CinderApp_ios.png */; };
+		65A446E6DFAD4D4EB863C558 /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 78C2BE6E995A4E6D8A7BC42B /* Images.xcassets */; };
 		C725DFFE121DAC7F00FA186B /* CoreMedia.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = C727C02B121B400300192073 /* CoreMedia.framework */; settings = {ATTRIBUTES = (Weak, ); }; };
 		C725E001121DAC8F00FA186B /* AVFoundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = C725E000121DAC8F00FA186B /* AVFoundation.framework */; settings = {ATTRIBUTES = (Weak, ); }; };
 		C725E001121DAC8FFFFA18FF /* ImageIO.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 00CFDF6A1138442D0091FFFF /* ImageIO.framework */; };
 		C727C02E121B400300192073 /* CoreVideo.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = C727C02D121B400300192073 /* CoreVideo.framework */; settings = {ATTRIBUTES = (Weak, ); }; };
 		C7FB19D6124BC0D70045AFD2 /* AudioToolbox.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = C7FB19D5124BC0D70045AFD2 /* AudioToolbox.framework */; };
-		D51E46C859CF44128EEDCE53 /* CinderARKit.mm in Sources */ = {isa = PBXBuildFile; fileRef = 5FD023B30DB14C5FA06F9857 /* CinderARKit.mm */; };
-		DC2151742AE1487D8DFC91B8 /* LaunchScreen.xib in Resources */ = {isa = PBXBuildFile; fileRef = 6209A53EB94B4BE5917FAF4D /* LaunchScreen.xib */; };
 		DDDDE001121DAC8FFFFADDDD /* MobileCoreServices.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = DDDDDF6A1138442D0091DDDD /* MobileCoreServices.framework */; };
+		E90AF11E3BC14567928A8AB7 /* CinderARKit.mm in Sources */ = {isa = PBXBuildFile; fileRef = 14FA589DCE9E4803B40BEA80 /* CinderARKit.mm */; };
+		E9BFF142EC724E1CB6961F9A /* ARKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 50D0E81DBD364C2B82F1DFC9 /* ARKit.framework */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
-		00692BCF14FF149000D0A05E /* BasicViewProjection.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = BasicViewProjection.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		00692BCF14FF149000D0A05E /* BasicSample.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = BasicSample.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		00748057165D41390024B57A /* assets */ = {isa = PBXFileReference; lastKnownFileType = folder; name = assets; path = ../assets; sourceTree = "<group>"; };
 		0087D25412CD809F002CD69F /* CoreText.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreText.framework; path = System/Library/Frameworks/CoreText.framework; sourceTree = SDKROOT; };
 		00A66A351965AC8800B17EB3 /* Accelerate.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Accelerate.framework; path = System/Library/Frameworks/Accelerate.framework; sourceTree = SDKROOT; };
 		00CFDF6A1138442D0091E310 /* CoreGraphics.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreGraphics.framework; path = System/Library/Frameworks/CoreGraphics.framework; sourceTree = SDKROOT; };
 		00CFDF6A1138442D0091FFFF /* ImageIO.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = ImageIO.framework; path = System/Library/Frameworks/ImageIO.framework; sourceTree = SDKROOT; };
+		0BBAB31322504E45B9359045 /* BasicSampleApp.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.cpp; name = BasicSampleApp.cpp; path = ../src/BasicSampleApp.cpp; sourceTree = "<group>"; };
+		14FA589DCE9E4803B40BEA80 /* CinderARKit.mm */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.objcpp; name = CinderARKit.mm; path = ../../../src/CinderARKit.mm; sourceTree = "<group>"; };
 		1D30AB110D05D00D00671497 /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = System/Library/Frameworks/Foundation.framework; sourceTree = SDKROOT; };
 		1DF5F4DF0D08C38300B7A737 /* UIKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = UIKit.framework; path = System/Library/Frameworks/UIKit.framework; sourceTree = SDKROOT; };
-		2657845179EA49418C7D5AA1 /* BasicViewProjectionApp.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.cpp; name = BasicViewProjectionApp.cpp; path = ../src/BasicViewProjectionApp.cpp; sourceTree = "<group>"; };
+		26FD41F7115B4E2DAC0C1378 /* Resources.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = Resources.h; path = ../include/Resources.h; sourceTree = "<group>"; };
+		288FC50233824748B935569A /* LaunchScreen.xib */ = {isa = PBXFileReference; lastKnownFileType = "\"\""; path = LaunchScreen.xib; sourceTree = "<group>"; };
 		28FD14FF0DC6FC520079059D /* OpenGLES.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = OpenGLES.framework; path = System/Library/Frameworks/OpenGLES.framework; sourceTree = SDKROOT; };
 		28FD15070DC6FC5B0079059D /* QuartzCore.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = QuartzCore.framework; path = System/Library/Frameworks/QuartzCore.framework; sourceTree = SDKROOT; };
-		28FFC3DBE9D44569AB50E980 /* BasicViewProjection_Prefix.pch */ = {isa = PBXFileReference; lastKnownFileType = "\"\""; path = BasicViewProjection_Prefix.pch; sourceTree = "<group>"; };
-		3C81BFCBF4134575B67D0869 /* CinderARKitUtils.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = CinderARKitUtils.h; path = ../../../include/CinderARKitUtils.h; sourceTree = "<group>"; };
-		3DF69B4AE1CC456EAB19E281 /* CinderApp_ios.png */ = {isa = PBXFileReference; lastKnownFileType = "\"\""; name = CinderApp_ios.png; path = ../resources/CinderApp_ios.png; sourceTree = "<group>"; };
-		5FD023B30DB14C5FA06F9857 /* CinderARKit.mm */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.objcpp; name = CinderARKit.mm; path = ../../../src/CinderARKit.mm; sourceTree = "<group>"; };
-		6209A53EB94B4BE5917FAF4D /* LaunchScreen.xib */ = {isa = PBXFileReference; lastKnownFileType = "\"\""; path = LaunchScreen.xib; sourceTree = "<group>"; };
-		86099AEBF71648AE9E6D65F4 /* ARKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = ARKit.framework; path = System/Library/Frameworks/ARKit.framework; sourceTree = SDKROOT; };
-		91484B010D274CE98F3176D0 /* CinderARKit.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = CinderARKit.h; path = ../../../include/CinderARKit.h; sourceTree = "<group>"; };
-		A977FCF5ED4E474981F431AA /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		402F1C375A804FF7928C4ADB /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		50D0E81DBD364C2B82F1DFC9 /* ARKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = ARKit.framework; path = System/Library/Frameworks/ARKit.framework; sourceTree = SDKROOT; };
+		56F741FF31F4400288EA8E10 /* CinderARKit.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = CinderARKit.h; path = ../../../include/CinderARKit.h; sourceTree = "<group>"; };
+		78C2BE6E995A4E6D8A7BC42B /* Images.xcassets */ = {isa = PBXFileReference; lastKnownFileType = "\"\""; path = Images.xcassets; sourceTree = "<group>"; };
+		94EDD4FDF9FE4FB1A0A4D3C2 /* BasicSample_Prefix.pch */ = {isa = PBXFileReference; lastKnownFileType = "\"\""; path = BasicSample_Prefix.pch; sourceTree = "<group>"; };
+		A8A6D3427D58442392C42A53 /* CinderARKitUtils.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = CinderARKitUtils.h; path = ../../../include/CinderARKitUtils.h; sourceTree = "<group>"; };
 		C725E000121DAC8F00FA186B /* AVFoundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AVFoundation.framework; path = System/Library/Frameworks/AVFoundation.framework; sourceTree = SDKROOT; };
 		C727C02B121B400300192073 /* CoreMedia.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreMedia.framework; path = System/Library/Frameworks/CoreMedia.framework; sourceTree = SDKROOT; };
 		C727C02D121B400300192073 /* CoreVideo.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreVideo.framework; path = System/Library/Frameworks/CoreVideo.framework; sourceTree = SDKROOT; };
 		C7FB19D5124BC0D70045AFD2 /* AudioToolbox.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AudioToolbox.framework; path = System/Library/Frameworks/AudioToolbox.framework; sourceTree = SDKROOT; };
-		CD7A2338B76B467596988862 /* Resources.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = Resources.h; path = ../include/Resources.h; sourceTree = "<group>"; };
+		CDDD27D4738C41F1B3907FAD /* CinderApp_ios.png */ = {isa = PBXFileReference; lastKnownFileType = "\"\""; name = CinderApp_ios.png; path = ../resources/CinderApp_ios.png; sourceTree = "<group>"; };
 		DDDDDF6A1138442D0091DDDD /* MobileCoreServices.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = MobileCoreServices.framework; path = System/Library/Frameworks/MobileCoreServices.framework; sourceTree = SDKROOT; };
-		EF65B51FCD8843CEA9A24ACF /* Images.xcassets */ = {isa = PBXFileReference; lastKnownFileType = "\"\""; path = Images.xcassets; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -76,7 +76,7 @@
 				C7FB19D6124BC0D70045AFD2 /* AudioToolbox.framework in Frameworks */,
 				00A66A361965AC8800B17EB3 /* Accelerate.framework in Frameworks */,
 				0087D25512CD809F002CD69F /* CoreText.framework in Frameworks */,
-				6ABB09729BFC4C999BE5F016 /* ARKit.framework in Frameworks */,
+				E9BFF142EC724E1CB6961F9A /* ARKit.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -98,7 +98,7 @@
 		00692BD014FF149000D0A05E /* Products */ = {
 			isa = PBXGroup;
 			children = (
-				00692BCF14FF149000D0A05E /* BasicViewProjection.app */,
+				00692BCF14FF149000D0A05E /* BasicSample.app */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -119,7 +119,7 @@
 				DDDDDF6A1138442D0091DDDD /* MobileCoreServices.framework */,
 				C725E000121DAC8F00FA186B /* AVFoundation.framework */,
 				0087D25412CD809F002CD69F /* CoreText.framework */,
-				86099AEBF71648AE9E6D65F4 /* ARKit.framework */,
+				50D0E81DBD364C2B82F1DFC9 /* ARKit.framework */,
 			);
 			name = Frameworks;
 			sourceTree = "<group>";
@@ -127,7 +127,7 @@
 		00692BD914FF149000D0A05E /* Source */ = {
 			isa = PBXGroup;
 			children = (
-				2657845179EA49418C7D5AA1 /* BasicViewProjectionApp.cpp */,
+				0BBAB31322504E45B9359045 /* BasicSampleApp.cpp */,
 			);
 			name = Source;
 			sourceTree = "<group>";
@@ -136,36 +136,19 @@
 			isa = PBXGroup;
 			children = (
 				00748057165D41390024B57A /* assets */,
-				3DF69B4AE1CC456EAB19E281 /* CinderApp_ios.png */,
-				EF65B51FCD8843CEA9A24ACF /* Images.xcassets */,
-				6209A53EB94B4BE5917FAF4D /* LaunchScreen.xib */,
-				A977FCF5ED4E474981F431AA /* Info.plist */,
+				CDDD27D4738C41F1B3907FAD /* CinderApp_ios.png */,
+				78C2BE6E995A4E6D8A7BC42B /* Images.xcassets */,
+				288FC50233824748B935569A /* LaunchScreen.xib */,
+				402F1C375A804FF7928C4ADB /* Info.plist */,
 			);
 			name = Resources;
 			sourceTree = "<group>";
 		};
-		290F5DBBC1634339B2CB77B1 /* src */ = {
+		8E484DD82FF64C5491F9A190 /* include */ = {
 			isa = PBXGroup;
 			children = (
-				5FD023B30DB14C5FA06F9857 /* CinderARKit.mm */,
-			);
-			name = src;
-			sourceTree = "<group>";
-		};
-		30237442476E4A028E6E2372 /* Cinder-ARKit */ = {
-			isa = PBXGroup;
-			children = (
-				290F5DBBC1634339B2CB77B1 /* src */,
-				56B98630C2204D15A13DFB34 /* include */,
-			);
-			name = "Cinder-ARKit";
-			sourceTree = "<group>";
-		};
-		56B98630C2204D15A13DFB34 /* include */ = {
-			isa = PBXGroup;
-			children = (
-				91484B010D274CE98F3176D0 /* CinderARKit.h */,
-				3C81BFCBF4134575B67D0869 /* CinderARKitUtils.h */,
+				56F741FF31F4400288EA8E10 /* CinderARKit.h */,
+				A8A6D3427D58442392C42A53 /* CinderARKitUtils.h */,
 			);
 			name = include;
 			sourceTree = "<group>";
@@ -173,8 +156,8 @@
 		99692BD914FF149000D0A05F /* Headers */ = {
 			isa = PBXGroup;
 			children = (
-				CD7A2338B76B467596988862 /* Resources.h */,
-				28FFC3DBE9D44569AB50E980 /* BasicViewProjection_Prefix.pch */,
+				26FD41F7115B4E2DAC0C1378 /* Resources.h */,
+				94EDD4FDF9FE4FB1A0A4D3C2 /* BasicSample_Prefix.pch */,
 			);
 			name = Headers;
 			sourceTree = "<group>";
@@ -182,17 +165,34 @@
 		99692BD914FF149000DFFFFF /* Blocks */ = {
 			isa = PBXGroup;
 			children = (
-				30237442476E4A028E6E2372 /* Cinder-ARKit */,
+				F97157F3640B4335BD88D576 /* Cinder-ARKit */,
 			);
 			name = Blocks;
+			sourceTree = "<group>";
+		};
+		C1E758BC33424E1FB154FA16 /* src */ = {
+			isa = PBXGroup;
+			children = (
+				14FA589DCE9E4803B40BEA80 /* CinderARKit.mm */,
+			);
+			name = src;
+			sourceTree = "<group>";
+		};
+		F97157F3640B4335BD88D576 /* Cinder-ARKit */ = {
+			isa = PBXGroup;
+			children = (
+				C1E758BC33424E1FB154FA16 /* src */,
+				8E484DD82FF64C5491F9A190 /* include */,
+			);
+			name = "Cinder-ARKit";
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
-		00692BCE14FF149000D0A05E /* BasicViewProjection */ = {
+		00692BCE14FF149000D0A05E /* BasicSample */ = {
 			isa = PBXNativeTarget;
-			buildConfigurationList = 00692BF514FF149000D0A05E /* Build configuration list for PBXNativeTarget "BasicViewProjection" */;
+			buildConfigurationList = 00692BF514FF149000D0A05E /* Build configuration list for PBXNativeTarget "BasicSample" */;
 			buildPhases = (
 				00692BCB14FF149000D0A05E /* Sources */,
 				00692BCC14FF149000D0A05E /* Frameworks */,
@@ -202,9 +202,9 @@
 			);
 			dependencies = (
 			);
-			name = BasicViewProjection;
-			productName = BasicViewProjection;
-			productReference = 00692BCF14FF149000D0A05E /* BasicViewProjection.app */;
+			name = BasicSample;
+			productName = BasicSample;
+			productReference = 00692BCF14FF149000D0A05E /* BasicSample.app */;
 			productType = "com.apple.product-type.application";
 		};
 /* End PBXNativeTarget section */
@@ -219,7 +219,7 @@
 					};
 				};
 			};
-			buildConfigurationList = 00692BC914FF149000D0A05E /* Build configuration list for PBXProject "BasicViewProjection" */;
+			buildConfigurationList = 00692BC914FF149000D0A05E /* Build configuration list for PBXProject "BasicSample" */;
 			compatibilityVersion = "Xcode 3.2";
 			developmentRegion = English;
 			hasScannedForEncodings = 0;
@@ -231,7 +231,7 @@
 			projectDirPath = "";
 			projectRoot = "";
 			targets = (
-				00692BCE14FF149000D0A05E /* BasicViewProjection */,
+				00692BCE14FF149000D0A05E /* BasicSample */,
 			);
 		};
 /* End PBXProject section */
@@ -242,9 +242,9 @@
 			buildActionMask = 2147483647;
 			files = (
 				00748058165D41390024B57A /* assets in Resources */,
-				125FCB93657447CD8BB605EB /* CinderApp_ios.png in Resources */,
-				AE457B3B89E148B0B1BA65D4 /* Images.xcassets in Resources */,
-				DC2151742AE1487D8DFC91B8 /* LaunchScreen.xib in Resources */,
+				4E2F627740AC41A4B7925997 /* CinderApp_ios.png in Resources */,
+				65A446E6DFAD4D4EB863C558 /* Images.xcassets in Resources */,
+				2D0E5CE007B241AB933A6627 /* LaunchScreen.xib in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -255,8 +255,8 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				0D7BE7A9F4154D12A37B9680 /* BasicViewProjectionApp.cpp in Sources */,
-				D51E46C859CF44128EEDCE53 /* CinderARKit.mm in Sources */,
+				3050CF968FF4482F9EC0232B /* BasicSampleApp.cpp in Sources */,
+				E90AF11E3BC14567928A8AB7 /* CinderARKit.mm in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -332,10 +332,9 @@
 		00692BF614FF149000D0A05E /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
-				DEBUG_INFORMATION_FORMAT = dwarf;
 				DEVELOPMENT_TEAM = H5M8J8RH6S;
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
-				GCC_PREFIX_HEADER = BasicViewProjection_Prefix.pch;
+				GCC_PREFIX_HEADER = BasicSample_Prefix.pch;
 				INFOPLIST_FILE = Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 11.0;
 				"OTHER_LDFLAGS[sdk=iphoneos*][arch=*]" = (
@@ -354,10 +353,9 @@
 		00692BF714FF149000D0A05E /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
-				DEBUG_INFORMATION_FORMAT = dwarf;
 				DEVELOPMENT_TEAM = H5M8J8RH6S;
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
-				GCC_PREFIX_HEADER = BasicViewProjection_Prefix.pch;
+				GCC_PREFIX_HEADER = BasicSample_Prefix.pch;
 				INFOPLIST_FILE = Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 11.0;
 				"OTHER_LDFLAGS[sdk=iphoneos*][arch=*]" = (
@@ -376,7 +374,7 @@
 /* End XCBuildConfiguration section */
 
 /* Begin XCConfigurationList section */
-		00692BC914FF149000D0A05E /* Build configuration list for PBXProject "BasicViewProjection" */ = {
+		00692BC914FF149000D0A05E /* Build configuration list for PBXProject "BasicSample" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				00692BF314FF149000D0A05E /* Debug */,
@@ -385,7 +383,7 @@
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
 		};
-		00692BF514FF149000D0A05E /* Build configuration list for PBXNativeTarget "BasicViewProjection" */ = {
+		00692BF514FF149000D0A05E /* Build configuration list for PBXNativeTarget "BasicSample" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				00692BF614FF149000D0A05E /* Debug */,
