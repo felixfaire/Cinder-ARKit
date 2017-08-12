@@ -36,7 +36,6 @@ class Session
 public:
     
     Session();
-    Session( const Format options );
     ~Session();
     
     /**  Adds an anchor point to the ARSession relative from the current camera position
