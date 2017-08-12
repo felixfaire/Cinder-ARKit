@@ -5,57 +5,69 @@
 //  Created by Felix Faire on 11/08/2017.
 //
 
+#if CI_DBG
+  #define DBG_ASSERT(expression) if (! (expression)) ::kill (0, SIGTRAP);
+#else
+  #define DBG_ASSERT(expression)
+#endif
+
 #import <Foundation/Foundation.h>
 #import <ARKit/ARKit.h>
 
-#define AR_ASSERT(expression) if (! (expression)) ::kill (0, SIGTRAP);
-
-@interface CinderARKitImpl : NSObject<ARSessionDelegate>
+@interface ARKitSessionImpl : NSObject<ARSessionDelegate>
 {
-    ARSession* mARSession;
+    ARSession*       mARSession;
+    
+    int32_t          mSurfaceChannelOrderCode;
+    int32_t          mExposedFrameBytesPerRow;
+    int32_t          mExposedFrameHeight;
+    int32_t          mExposedFrameWidth;
 }
 - (void)session:(ARSession *)session didUpdateFrame:(ARFrame *)frame;
+- (void)session:(ARSession *)session didAddAnchors:(NSArray<ARAnchor*>*)anchors;
+- (void)session:(ARSession *)session didUpdateAnchors:(NSArray<ARAnchor*>*)anchors;
+- (void)session:(ARSession *)session didRemoveAnchors:(NSArray<ARAnchor*>*)anchors;
+
 - (void)addAnchorWithxOffset:(NSNumber *)x yOffset:(NSNumber *)y zOffset:(NSNumber *)z;
 
 @end
-
 
 #import "CinderARKit.h"
 #import "CinderARKitUtils.h"
 
 // Global instances of the session to bridge C++ and Obj C
-static CinderARKitImpl* cinderArKitImpl = nil;
-static CinderARKit* cinderArKit = nullptr;
+static ARKitSessionImpl* ciARKitSessionImpl = nil;
+static ARKit::Session* ciARKitSession = nullptr;
 
-CinderARKit::CinderARKit()
+ARKit::Session::Session()
 {
-    AR_ASSERT(cinderArKit == nullptr)
+    DBG_ASSERT(ciARKitSession == nullptr)
     
-    cinderArKit = this;
+    ciARKitSession = this;
 
-    if (cinderArKitImpl == nil)
+    if (ciARKitSessionImpl == nil)
     {
-        cinderArKitImpl = [[CinderARKitImpl alloc] init];
+        ciARKitSessionImpl = [[ARKitSessionImpl alloc] init];
         
-        AR_ASSERT(cinderArKitImpl);
+        DBG_ASSERT(ciARKitSessionImpl);
     }
 }
 
-CinderARKit::~CinderARKit()
+ARKit::Session::~Session()
 {
-    AR_ASSERT(cinderArKit == this);
-    cinderArKit = nullptr;
+    DBG_ASSERT(ciARKitSession == this);
+    ciARKitSession = nullptr;
 }
 
-void CinderARKit::addAnchorRelativeToCamera( vec3 offset )
+void ARKit::Session::addAnchorRelativeToCamera( vec3 offset )
 {
     std::cout << "Adding anchor point" << std::endl;
-    [cinderArKitImpl addAnchorWithxOffset:@(offset.x) yOffset:@(offset.y) zOffset:@(offset.z)];
+    [ciARKitSessionImpl addAnchorWithxOffset:@(offset.x) yOffset:@(offset.y) zOffset:@(offset.z)];
 }
 
 
 
-@implementation CinderARKitImpl
+@implementation ARKitSessionImpl
 
 - (id) init
 {
@@ -74,15 +86,43 @@ void CinderARKit::addAnchorRelativeToCamera( vec3 offset )
 - (void)session:(ARSession *)session didUpdateFrame:(ARFrame *)frame
 {
     // Update view matrix
-    cinderArKit->mViewMatrix = fromMtl(matrix_invert(frame.camera.transform));
+    ciARKitSession->mViewMatrix = fromMtl(matrix_invert(frame.camera.transform));
     
     // Update projection matrix
-    vec2 size = cinderArKit->mViewSize;
+    vec2 size = ciARKitSession->mViewSize;
     CGSize viewportSize = CGSizeMake(size.y, size.x);
-    cinderArKit->mProjectionMatrix = fromMtl([frame.camera projectionMatrixForOrientation:UIInterfaceOrientationLandscapeRight
+    ciARKitSession->mProjectionMatrix = fromMtl([frame.camera projectionMatrixForOrientation:UIInterfaceOrientationLandscapeRight
                                                                        viewportSize:viewportSize
                                                                              zNear:0.001
                                                                               zFar:1000]);
+
+    // Update capture image
+    CVPixelBufferRef pixelBuffer = frame.capturedImage;
+    uint8_t* data = (uint8_t *)CVPixelBufferGetBaseAddress( pixelBuffer );
+    mExposedFrameBytesPerRow = (int32_t)CVPixelBufferGetBytesPerRow( pixelBuffer );
+    mExposedFrameWidth = (int32_t)CVPixelBufferGetWidth( pixelBuffer );
+    mExposedFrameHeight = (int32_t)CVPixelBufferGetHeight( pixelBuffer );
+
+    ciARKitSession->mCurrentFrame = cinder::Surface8u( data, mExposedFrameWidth, mExposedFrameHeight, mExposedFrameBytesPerRow, cinder::SurfaceChannelOrder::BGRA );
+}
+
+// ===== ANCHOR HANDLING ===========================================================================================
+- (void)session:(ARSession *)session didAddAnchors:(NSArray<ARAnchor*>*)anchors
+{
+    for (ARAnchor* anchor in anchors)
+        ciARKitSession->mAnchorMap[getUidStringFromAnchor( anchor )] = { fromMtl( anchor.transform ) };
+}
+
+- (void)session:(ARSession *)session didUpdateAnchors:(NSArray<ARAnchor*>*)anchors
+{
+    for (ARAnchor* anchor in anchors)
+        ciARKitSession->mAnchorMap[getUidStringFromAnchor( anchor )] = { fromMtl( anchor.transform ) };
+}
+
+- (void)session:(ARSession *)session didRemoveAnchors:(NSArray<ARAnchor*>*)anchors
+{
+    for (ARAnchor* anchor in anchors)
+        ciARKitSession->mAnchorMap.erase(getUidStringFromAnchor( anchor ));
 }
 
 - (void)addAnchorWithxOffset:(NSNumber*)x yOffset:(NSNumber*)y zOffset:(NSNumber*)z;
@@ -102,6 +142,7 @@ void CinderARKit::addAnchorRelativeToCamera( vec3 offset )
         [mARSession addAnchor:anchor];
     }
 }
+
 
 
 @end

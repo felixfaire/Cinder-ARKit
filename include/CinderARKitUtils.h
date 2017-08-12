@@ -43,4 +43,10 @@ static mat4 modelMatFromTransform( matrix_float4x4 transform )
     return fromMtl(modelMat);
 }
 
+static const std::string getUidStringFromAnchor( ARAnchor* anchor )
+{
+    NSString* uid = anchor.identifier.UUIDString;
+    return std::string([uid UTF8String], [uid lengthOfBytesUsingEncoding:NSUTF8StringEncoding]);
+}
+
 #endif /* CinderARKitUtils_h */
