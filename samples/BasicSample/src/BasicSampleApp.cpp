@@ -15,18 +15,19 @@ class BasicSampleApp : public App {
     void update() override;
     void draw() override;
     
-    ARKit::Session mARSession;
+    ARKit::SessionRef mARSession;
 };
 
 void BasicSampleApp::setup()
 {
-    mARSession.setViewSize( getWindowSize() );
+    mARSession = ARKit::Session::create();
+    mARSession->setViewSize( getWindowSize() );
 }
 
 void BasicSampleApp::touchesBegan( TouchEvent event )
 {
     // Add a point 50cm in front of camera
-    mARSession.addAnchorRelativeToCamera( vec3(0.0f, 0.0f, -0.5f) );
+    mARSession->addAnchorRelativeToCamera( vec3(0.0f, 0.0f, -0.5f) );
 }
 
 void BasicSampleApp::update()
@@ -38,13 +39,13 @@ void BasicSampleApp::draw()
     gl::clear( Color( 0, 0, 0 ) );
     
     gl::ScopedMatrices matScp;
-    gl::setViewMatrix( mARSession.mViewMatrix );
-    gl::setProjectionMatrix( mARSession.mProjectionMatrix );
+    gl::setViewMatrix( mARSession->mViewMatrix );
+    gl::setProjectionMatrix( mARSession->mProjectionMatrix );
     
     gl::ScopedGlslProg glslProg( gl::getStockShader( gl::ShaderDef().color() ));
     gl::color( 1.0f, 1.0f, 1.0f );
     
-    for (const auto& a : mARSession.mAnchorMap)
+    for (const auto& a : mARSession->mAnchorMap)
     {
         gl::ScopedMatrices matScp;
         gl::setModelMatrix( a.second.mTransform );

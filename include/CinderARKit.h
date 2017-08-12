@@ -18,6 +18,9 @@ using namespace ci;
 */
 namespace ARKit {
 
+class Session;
+typedef std::shared_ptr<Session> SessionRef;
+
 /**  An anchor point that will be tracked by ARKit*/
 struct Anchor
 {
@@ -35,8 +38,33 @@ class Session
 {
 public:
     
+    enum TrackingConfiguration
+    {
+        OrientationTracking,
+        WorldTracking,
+        WorldTrackingWithHorizontalPlaneDetection
+    };
+
+    /**  Format contains the options for the session when it is created
+    */
+    class Format
+    {
+    public:
+        Format(){}
+        Format& configuration( TrackingConfiguration config ) { mConfiguration = config; return *this; }
+        
+        TrackingConfiguration mConfiguration = { WorldTrackingWithHorizontalPlaneDetection };
+    };
+    
+    static SessionRef create( Format format = Format() );
+    
     Session();
+    Session( Format format = Format() );
     ~Session();
+    
+    void run();
+    void runConfiguration( TrackingConfiguration config );
+    void pause();
     
     /**  Adds an anchor point to the ARSession relative from the current camera position
          and orienation.
@@ -61,6 +89,8 @@ public:
     mat4                   mProjectionMatrix;
     
     vec2                   mViewSize = vec2(1.0f);
+    
+    Format                 mFormat;
     
     
 };

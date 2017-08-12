@@ -8,12 +8,20 @@
 #ifndef CinderARKitUtils_h
 #define CinderARKitUtils_h
 
+#if DEBUG
+  #define DBG_ASSERT(expression) if (! (expression)) ::kill (0, SIGTRAP);
+#else
+  #define DBG_ASSERT(expression)
+#endif
+
 /**
      Utils to convert between Metal objects and Cinder objects
 */
 
 // Conversions to simd types
 // Thanks to http://wdlindmeier.com/ !
+
+namespace ARKit {
 
 template <typename T, typename U >
 const U static inline convert( const T & t )
@@ -48,5 +56,40 @@ static const std::string getUidStringFromAnchor( ARAnchor* anchor )
     NSString* uid = anchor.identifier.UUIDString;
     return std::string([uid UTF8String], [uid lengthOfBytesUsingEncoding:NSUTF8StringEncoding]);
 }
+
+
+static ARConfiguration* getNativeARConfiguration( ARKit::Session::TrackingConfiguration config )
+{
+    ARConfiguration* arConfig;
+    ARWorldTrackingConfiguration* wtc = [ARWorldTrackingConfiguration new];
+    
+    switch (config)
+    {
+      case ARKit::Session::TrackingConfiguration::OrientationTracking:
+        arConfig = [AROrientationTrackingConfiguration new];
+        break;
+        
+      case ARKit::Session::TrackingConfiguration::WorldTracking:
+        wtc.planeDetection = ARPlaneDetectionNone;
+        arConfig = wtc;
+        break;
+
+      case ARKit::Session::TrackingConfiguration::WorldTrackingWithHorizontalPlaneDetection:
+        wtc.planeDetection = ARPlaneDetectionHorizontal;
+        arConfig = wtc;
+        break;
+
+      default:
+        // AR Tracking Configuration not implemented
+        DBG_ASSERT(false);
+        arConfig = [ARWorldTrackingConfiguration new];
+        break;
+    }
+    
+    return arConfig;
+}
+
+
+} // namespace ARKit
 
 #endif /* CinderARKitUtils_h */

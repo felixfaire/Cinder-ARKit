@@ -5,42 +5,47 @@
 //  Created by Felix Faire on 11/08/2017.
 //
 
-#if CI_DBG
-  #define DBG_ASSERT(expression) if (! (expression)) ::kill (0, SIGTRAP);
-#else
-  #define DBG_ASSERT(expression)
-#endif
 
 #import <Foundation/Foundation.h>
 #import <ARKit/ARKit.h>
 
 @interface ARKitSessionImpl : NSObject<ARSessionDelegate>
 {
-    ARSession*       mARSession;
-    
     int32_t          mSurfaceChannelOrderCode;
     int32_t          mExposedFrameBytesPerRow;
     int32_t          mExposedFrameHeight;
     int32_t          mExposedFrameWidth;
+    
+@public
+    ARSession*       mARSession;
 }
-- (void)session:(ARSession *)session didUpdateFrame:(ARFrame *)frame;
-- (void)session:(ARSession *)session didAddAnchors:(NSArray<ARAnchor*>*)anchors;
-- (void)session:(ARSession *)session didUpdateAnchors:(NSArray<ARAnchor*>*)anchors;
-- (void)session:(ARSession *)session didRemoveAnchors:(NSArray<ARAnchor*>*)anchors;
+- (void)session:(ARSession*)session didUpdateFrame:(ARFrame*)frame;
+- (void)session:(ARSession*)session didAddAnchors:(NSArray<ARAnchor*>*)anchors;
+- (void)session:(ARSession*)session didUpdateAnchors:(NSArray<ARAnchor*>*)anchors;
+- (void)session:(ARSession*)session didRemoveAnchors:(NSArray<ARAnchor*>*)anchors;
 
-- (void)addAnchorWithxOffset:(NSNumber *)x yOffset:(NSNumber *)y zOffset:(NSNumber *)z;
+- (void)addAnchorWithxOffset:(NSNumber*)x yOffset:(NSNumber*)y zOffset:(NSNumber *)z;
 
 @end
 
 #import "CinderARKit.h"
 #import "CinderARKitUtils.h"
 
+using namespace ARKit;
+
 // Global instances of the session to bridge C++ and Obj C
 static ARKitSessionImpl* ciARKitSessionImpl = nil;
-static ARKit::Session* ciARKitSession = nullptr;
+static Session* ciARKitSession = nullptr;
 
-ARKit::Session::Session()
+SessionRef Session::create( Session::Format format )
 {
+    return std::make_shared<Session>( format );
+}
+
+Session::Session( Session::Format format )
+    : mFormat( format )
+{
+    // You already have an ARSession instance running
     DBG_ASSERT(ciARKitSession == nullptr)
     
     ciARKitSession = this;
@@ -53,17 +58,36 @@ ARKit::Session::Session()
     }
 }
 
-ARKit::Session::~Session()
+Session::~Session()
 {
     DBG_ASSERT(ciARKitSession == this);
     ciARKitSession = nullptr;
 }
 
-void ARKit::Session::addAnchorRelativeToCamera( vec3 offset )
+void Session::run()
+{
+    runConfiguration( mFormat.mConfiguration );
+}
+
+void Session::runConfiguration( TrackingConfiguration config )
+{
+    mFormat.mConfiguration = config;
+    ARConfiguration* configuration = getNativeARConfiguration( config );
+    [ciARKitSessionImpl->mARSession runWithConfiguration:configuration];
+}
+
+void Session::pause()
+{
+    [ciARKitSessionImpl->mARSession pause];
+}
+
+void Session::addAnchorRelativeToCamera( vec3 offset )
 {
     std::cout << "Adding anchor point" << std::endl;
     [ciARKitSessionImpl addAnchorWithxOffset:@(offset.x) yOffset:@(offset.y) zOffset:@(offset.z)];
 }
+
+
 
 
 
@@ -76,14 +100,10 @@ void ARKit::Session::addAnchorRelativeToCamera( vec3 offset )
     mARSession = [ARSession new];
     mARSession.delegate = self;
     
-    ARWorldTrackingConfiguration *configuration = [ARWorldTrackingConfiguration new];
-    configuration.planeDetection = ARPlaneDetectionHorizontal;
-    [mARSession runWithConfiguration:configuration];
-    
     return self;
 }
 
-- (void)session:(ARSession *)session didUpdateFrame:(ARFrame *)frame
+- (void)session:(ARSession*)session didUpdateFrame:(ARFrame*)frame
 {
     // Update view matrix
     ciARKitSession->mViewMatrix = fromMtl(matrix_invert(frame.camera.transform));
@@ -98,7 +118,7 @@ void ARKit::Session::addAnchorRelativeToCamera( vec3 offset )
 
     // Update capture image
     CVPixelBufferRef pixelBuffer = frame.capturedImage;
-    uint8_t* data = (uint8_t *)CVPixelBufferGetBaseAddress( pixelBuffer );
+    uint8_t* data = (uint8_t*)CVPixelBufferGetBaseAddress( pixelBuffer );
     mExposedFrameBytesPerRow = (int32_t)CVPixelBufferGetBytesPerRow( pixelBuffer );
     mExposedFrameWidth = (int32_t)CVPixelBufferGetWidth( pixelBuffer );
     mExposedFrameHeight = (int32_t)CVPixelBufferGetHeight( pixelBuffer );
