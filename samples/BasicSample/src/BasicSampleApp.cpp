@@ -40,6 +40,7 @@ void BasicSampleApp::draw()
 {
     gl::clear( Color( 0, 0, 0 ) );
     
+    gl::color( 1.0f, 1.0f, 1.0f, 1.0f );
     gl::draw( mARSession->getFrameLumaTexture(), getWindowBounds() );
     
     gl::ScopedMatrices matScp;
@@ -47,7 +48,8 @@ void BasicSampleApp::draw()
     gl::setProjectionMatrix( mARSession->mProjectionMatrix );
     
     gl::ScopedGlslProg glslProg( gl::getStockShader( gl::ShaderDef().color() ));
-    gl::color( 1.0f, 1.0f, 1.0f );
+    gl::ScopedColor colScp;
+    gl::color( 0.0f, 0.5f, 1.0f );
     
     for (const auto& a : mARSession->mAnchors)
     {
@@ -57,8 +59,6 @@ void BasicSampleApp::draw()
         gl::drawCube( vec3(0.0f), vec3(0.02f) );
     }
     
-    gl::ScopedColor colScp;
-    
     for (const auto& a : mARSession->mPlaneAnchors)
     {
         gl::ScopedMatrices matScp;
@@ -67,7 +67,7 @@ void BasicSampleApp::draw()
         gl::rotate( M_PI*0.5f, vec3(1,0,0) ); // Make it parallel with the ground
         const float xRad = a.second.mExtent.x * 0.5f;
         const float zRad = a.second.mExtent.z * 0.5f;
-        gl::color( 1.0f, 1.0f, 1.0f, 0.2f );
+        gl::color( 0.0f, 0.6f, 0.9f, 0.2f );
         gl::drawSolidRect( Rectf( -xRad,-zRad, xRad, zRad ));
     }
 }

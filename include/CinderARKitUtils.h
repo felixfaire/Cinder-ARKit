@@ -84,6 +84,14 @@ static ARConfiguration* getNativeARConfiguration( ARKit::Session::TrackingConfig
     return arConfig;
 }
 
+cinder::Channel8u getChannelForCVPixelBuffer( const CVPixelBufferRef& pixelBuffer, int planeIndex, int increment = 1, int offset = 0 )
+{
+    uint8_t* data = (uint8_t*)CVPixelBufferGetBaseAddressOfPlane( pixelBuffer, planeIndex );
+    const size_t bytesPerRow = CVPixelBufferGetBytesPerRowOfPlane( pixelBuffer, planeIndex );
+    const size_t width = CVPixelBufferGetWidthOfPlane( pixelBuffer, planeIndex );
+    const size_t height = CVPixelBufferGetHeightOfPlane( pixelBuffer, planeIndex );
+    return cinder::Channel8u( (int32_t)width, (int32_t)height, (int32_t)bytesPerRow, increment, data + offset );
+}
 
 } // namespace ARKit
 

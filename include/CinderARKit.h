@@ -90,14 +90,16 @@ public:
 
     /**  Returns the luma texture for the current frame capture
     */
-    gl::Texture2dRef getFrameLumaTexture()  { return gl::Texture2d::create( mFrameLuma ); }
+    gl::Texture2dRef getFrameLumaTexture()    { return gl::Texture2d::create( mFrameYChannel ); }
 
     // Currently members are publically exposed to Obj C Implementation
     
     std::map<std::string, Anchor>       mAnchors;
     std::map<std::string, PlaneAnchor>  mPlaneAnchors;
     
-    cinder::Channel8u      mFrameLuma;
+    cinder::Channel8u      mFrameYChannel;
+    cinder::Channel8u      mFrameCbChannel;
+    cinder::Channel8u      mFrameCrChannel;
 
     mat4                   mViewMatrix;
     mat4                   mProjectionMatrix;

@@ -111,16 +111,14 @@ void Session::addAnchorRelativeToCamera( vec3 offset )
                                                                              zNear:0.001
                                                                               zFar:1000]);
 
-    // TODO: Update capture image
-    CVPixelBufferRef pixelBuffer = frame.capturedImage;
-    
-    const int lumaIndex = 0;
-    uint8_t* data = (uint8_t*)CVPixelBufferGetBaseAddressOfPlane( pixelBuffer, lumaIndex );
-    const size_t bytesPerRow = CVPixelBufferGetBytesPerRowOfPlane( pixelBuffer, lumaIndex );
-    const size_t width = CVPixelBufferGetWidthOfPlane( pixelBuffer, lumaIndex );
-    const size_t height = CVPixelBufferGetHeightOfPlane( pixelBuffer, lumaIndex );
 
-    ciARKitSession->mFrameLuma = cinder::Channel8u( width, height, bytesPerRow, 1, data );
+    CVPixelBufferRef pixelBuffer = frame.capturedImage;
+
+    // Capture pixel YCbCr
+    
+    ciARKitSession->mFrameYChannel  = getChannelForCVPixelBuffer( pixelBuffer, 0 );
+    ciARKitSession->mFrameCbChannel = getChannelForCVPixelBuffer( pixelBuffer, 1, 2, 0 );
+    ciARKitSession->mFrameCrChannel = getChannelForCVPixelBuffer( pixelBuffer, 1, 2, 1 );
 }
 
 // ===== ANCHOR HANDLING ===========================================================================================
