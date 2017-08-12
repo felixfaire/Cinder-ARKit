@@ -40,6 +40,8 @@ void BasicSampleApp::draw()
 {
     gl::clear( Color( 0, 0, 0 ) );
     
+    gl::draw( mARSession->getFrameLumaTexture(), getWindowBounds() );
+    
     gl::ScopedMatrices matScp;
     gl::setViewMatrix( mARSession->mViewMatrix );
     gl::setProjectionMatrix( mARSession->mProjectionMatrix );

@@ -11,11 +11,6 @@
 
 @interface ARKitSessionImpl : NSObject<ARSessionDelegate>
 {
-    int32_t          mSurfaceChannelOrderCode;
-    int32_t          mExposedFrameBytesPerRow;
-    int32_t          mExposedFrameHeight;
-    int32_t          mExposedFrameWidth;
-    
 @public
     ARSession*       mARSession;
 }
@@ -117,13 +112,15 @@ void Session::addAnchorRelativeToCamera( vec3 offset )
                                                                               zFar:1000]);
 
     // TODO: Update capture image
-//    CVPixelBufferRef pixelBuffer = frame.capturedImage;
-//    uint8_t* data = (uint8_t*)CVPixelBufferGetBaseAddress( pixelBuffer );
-//    mExposedFrameBytesPerRow = (int32_t)CVPixelBufferGetBytesPerRow( pixelBuffer );
-//    mExposedFrameWidth = (int32_t)CVPixelBufferGetWidth( pixelBuffer );
-//    mExposedFrameHeight = (int32_t)CVPixelBufferGetHeight( pixelBuffer );
-//
-//    ciARKitSession->mCurrentFrame = cinder::Surface8u( data, mExposedFrameWidth, mExposedFrameHeight, mExposedFrameBytesPerRow, cinder::SurfaceChannelOrder::BGRA );
+    CVPixelBufferRef pixelBuffer = frame.capturedImage;
+    
+    const int lumaIndex = 0;
+    uint8_t* data = (uint8_t*)CVPixelBufferGetBaseAddressOfPlane( pixelBuffer, lumaIndex );
+    const size_t bytesPerRow = CVPixelBufferGetBytesPerRowOfPlane( pixelBuffer, lumaIndex );
+    const size_t width = CVPixelBufferGetWidthOfPlane( pixelBuffer, lumaIndex );
+    const size_t height = CVPixelBufferGetHeightOfPlane( pixelBuffer, lumaIndex );
+
+    ciARKitSession->mFrameLuma = cinder::Channel8u( width, height, bytesPerRow, 1, data );
 }
 
 // ===== ANCHOR HANDLING ===========================================================================================

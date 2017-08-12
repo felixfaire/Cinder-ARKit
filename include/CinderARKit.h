@@ -88,16 +88,16 @@ public:
     */
     void setViewSize( ivec2 newSize )   { mViewSize = newSize; }
 
-    /**  Returns the texture for the current frame capture
+    /**  Returns the luma texture for the current frame capture
     */
-    gl::Texture2dRef getFrameTexture()  { return gl::Texture2d::create( mCurrentFrame ); }
+    gl::Texture2dRef getFrameLumaTexture()  { return gl::Texture2d::create( mFrameLuma ); }
 
     // Currently members are publically exposed to Obj C Implementation
     
     std::map<std::string, Anchor>       mAnchors;
     std::map<std::string, PlaneAnchor>  mPlaneAnchors;
     
-    cinder::Surface8u      mCurrentFrame;
+    cinder::Channel8u      mFrameLuma;
 
     mat4                   mViewMatrix;
     mat4                   mProjectionMatrix;
