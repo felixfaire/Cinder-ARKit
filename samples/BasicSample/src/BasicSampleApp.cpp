@@ -41,7 +41,7 @@ void BasicSampleApp::draw()
     gl::clear( Color( 0, 0, 0 ) );
     
     gl::color( 1.0f, 1.0f, 1.0f, 1.0f );
-    mARSession->drawRGBCaptureTexture( Area(0, 0, 200, 200) );
+    mARSession->drawRGBCaptureTexture( getWindowBounds() );
     
     gl::ScopedMatrices matScp;
     gl::setViewMatrix( mARSession->mViewMatrix );
