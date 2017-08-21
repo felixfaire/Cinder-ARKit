@@ -51,7 +51,7 @@ void BasicSampleApp::draw()
     gl::ScopedColor colScp;
     gl::color( 0.0f, 0.5f, 1.0f );
     
-    for (const auto& a : mARSession->getPlaneAnchors())
+    for (const auto& a : mARSession->getAnchors())
     {
         gl::ScopedMatrices matScp;
         gl::setModelMatrix( a.mTransform );
