@@ -10,6 +10,4 @@ Notes:
 - Your app must use Landscape Right orientation at the moment.
 
 TODO:
-- Implement Light estimate
-- Implement Camera projection helpers
 - Implement different app orientations

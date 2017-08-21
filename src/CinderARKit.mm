@@ -148,6 +148,9 @@ std::vector<PlaneAnchor> Session::getPlaneAnchors()
     // Update view matrix
     ciARKitSession->mViewMatrix = toMat4(matrix_invert(frame.camera.transform));
     
+    ciARKitSession->mAmbientLightIntensity = (float)[[frame lightEstimate] ambientIntensity] / 2000.0f;
+    ciARKitSession->mAmbientColorTemperature = (float)[[frame lightEstimate] ambientColorTemperature];
+    
     // Update projection matrix
     vec2 size = ciARKitSession->mFormat.mViewSize;
     CGSize viewportSize = CGSizeMake(size.y, size.x);

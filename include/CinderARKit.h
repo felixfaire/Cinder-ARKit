@@ -100,6 +100,16 @@ public:
     */
     void drawRGBCaptureTexture( Area area );
     
+    /**  Returns the estimated light intensity for the scene
+         0.0 (very dark) 1.0 (very bright)
+    */
+    float getAmbientLightIntensity()        { return mAmbientLightIntensity; }
+    
+    /**  Returns the estimated light color temperature for the scene in Kelvin
+         (6500 is pure white)
+    */
+    float getAmbientColorTemperature()      { return mAmbientColorTemperature; }
+    
     /**  Get the list of anchor transforms (points with orientations)
     */
     std::vector<Anchor> getAnchors();
@@ -121,9 +131,12 @@ public:
     mat4                   mViewMatrix;
     mat4                   mProjectionMatrix;
     
+    float                  mAmbientLightIntensity;
+    float                  mAmbientColorTemperature;
+    
     Format                 mFormat;
     
-    bool                    mIsRunning = false;
+    bool                   mIsRunning = false;
     
     gl::GlslProgRef        mYCbCrToRGBProg;
     

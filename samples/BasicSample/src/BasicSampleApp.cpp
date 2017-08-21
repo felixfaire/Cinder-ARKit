@@ -49,14 +49,14 @@ void BasicSampleApp::draw()
     
     gl::ScopedGlslProg glslProg( gl::getStockShader( gl::ShaderDef().color() ));
     gl::ScopedColor colScp;
-    gl::color( 0.0f, 0.5f, 1.0f );
+    gl::color( 1.0f, 1.0f, 1.0f );
     
     for (const auto& a : mARSession->getAnchors())
     {
         gl::ScopedMatrices matScp;
         gl::setModelMatrix( a.mTransform );
         
-        gl::drawCube( vec3(0.0f), vec3(0.02f) );
+        gl::drawStrokedCube( vec3(0.0f), vec3(0.02f) );
     }
     
     for (const auto& a : mARSession->getPlaneAnchors())
