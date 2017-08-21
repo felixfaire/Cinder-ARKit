@@ -100,6 +100,14 @@ public:
     */
     void drawRGBCaptureTexture( Area area );
     
+    /**  Get the list of anchor transforms (points with orientations)
+    */
+    std::vector<Anchor> getAnchors();
+    
+    /**  Get the list of plane anchor abjoects
+    */
+    std::vector<PlaneAnchor> getPlaneAnchors();
+    
 
     // Currently members are publically exposed to Obj C Implementation
     

@@ -51,22 +51,22 @@ void BasicSampleApp::draw()
     gl::ScopedColor colScp;
     gl::color( 0.0f, 0.5f, 1.0f );
     
-    for (const auto& a : mARSession->mAnchors)
+    for (const auto& a : mARSession->getPlaneAnchors())
     {
         gl::ScopedMatrices matScp;
-        gl::setModelMatrix( a.second.mTransform );
+        gl::setModelMatrix( a.mTransform );
         
         gl::drawCube( vec3(0.0f), vec3(0.02f) );
     }
     
-    for (const auto& a : mARSession->mPlaneAnchors)
+    for (const auto& a : mARSession->getPlaneAnchors())
     {
         gl::ScopedMatrices matScp;
-        gl::setModelMatrix( a.second.mTransform );
-        gl::translate( a.second.mCenter );
+        gl::setModelMatrix( a.mTransform );
+        gl::translate( a.mCenter );
         gl::rotate( M_PI*0.5f, vec3(1,0,0) ); // Make it parallel with the ground
-        const float xRad = a.second.mExtent.x * 0.5f;
-        const float zRad = a.second.mExtent.z * 0.5f;
+        const float xRad = a.mExtent.x * 0.5f;
+        const float zRad = a.mExtent.z * 0.5f;
         gl::color( 0.0f, 0.6f, 0.9f, 0.2f );
         gl::drawSolidRect( Rectf( -xRad,-zRad, xRad, zRad ));
     }

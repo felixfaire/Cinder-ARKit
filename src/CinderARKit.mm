@@ -105,6 +105,26 @@ void Session::drawRGBCaptureTexture( Area area )
     gl::drawSolidRect( area );
 }
 
+std::vector<Anchor> Session::getAnchors()
+{
+    std::vector<Anchor> anchors;
+    
+    for (const auto& a : mAnchors)
+        anchors.push_back( a.second );
+    
+    return anchors;
+}
+
+std::vector<PlaneAnchor> Session::getPlaneAnchors()
+{
+    std::vector<PlaneAnchor> planeAnchors;
+    
+    for (const auto& a : mPlaneAnchors)
+        planeAnchors.push_back( a.second );
+    
+    return planeAnchors;
+}
+
 
 
 
