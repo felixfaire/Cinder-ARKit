@@ -145,20 +145,22 @@ std::vector<PlaneAnchor> Session::getPlaneAnchors()
 {
     ciARKitSession->mIsRunning = true;
     
-    // Update view matrix
-    ciARKitSession->mViewMatrix = toMat4(matrix_invert(frame.camera.transform));
+    auto orientation = [[UIApplication sharedApplication] statusBarOrientation];
     
-    ciARKitSession->mAmbientLightIntensity = (float)[[frame lightEstimate] ambientIntensity] / 2000.0f;
-    ciARKitSession->mAmbientColorTemperature = (float)[[frame lightEstimate] ambientColorTemperature];
+    // Update view matrix
+    ciARKitSession->mViewMatrix = toMat4([frame.camera viewMatrixForOrientation:orientation]);
     
     // Update projection matrix
-    vec2 size = ciARKitSession->mFormat.mViewSize;
-    CGSize viewportSize = CGSizeMake(size.y, size.x);
-    ciARKitSession->mProjectionMatrix = toMat4([frame.camera projectionMatrixForOrientation:UIInterfaceOrientationLandscapeRight
+    auto viewBounds = [[UIScreen mainScreen] bounds];
+    CGSize viewportSize = viewBounds.size;
+    ciARKitSession->mProjectionMatrix = toMat4([frame.camera projectionMatrixForOrientation:orientation
                                                                        viewportSize:viewportSize
                                                                              zNear:0.001
                                                                               zFar:1000]);
-
+    // Update light estimate
+    ciARKitSession->mAmbientLightIntensity = (float)[[frame lightEstimate] ambientIntensity] / 2000.0f;
+    ciARKitSession->mAmbientColorTemperature = (float)[[frame lightEstimate] ambientColorTemperature];
+    
     // Capture pixel YCbCr
     CVPixelBufferRef pixelBuffer = frame.capturedImage;
     ciARKitSession->mFrameYChannel  = getChannelForCVPixelBuffer( pixelBuffer, 0 );
