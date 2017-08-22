@@ -114,7 +114,7 @@ void Session::drawRGBCaptureTexture( Area area )
     mYCbCrToRGBProg->uniform( "u_CbTex", 1 );
     mYCbCrToRGBProg->uniform( "u_CrTex", 2 );
     mYCbCrToRGBProg->uniform( "u_Rotate", rotate );
-    gl::drawSolidRect( cameraRect.getCenteredFit( area, true ));
+    gl::drawSolidRect( cameraRect.getCenteredFill( area, true ));
 }
 
 std::vector<Anchor> Session::getAnchors()
