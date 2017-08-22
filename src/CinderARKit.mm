@@ -94,7 +94,18 @@ void Session::drawRGBCaptureTexture( Area area )
     const auto texY  = gl::Texture2d::create( mFrameYChannel );
     const auto texCr = gl::Texture2d::create( mFrameCrChannel );
     const auto texCb = gl::Texture2d::create( mFrameCbChannel );
-
+    
+    auto cameraRect = Rectf( vec2( 0.0f ), mCameraSize );
+    bool rotate = false;
+    
+    gl::ScopedMatrices matScp;
+    
+    if (UIInterfaceOrientationIsPortrait( [[UIApplication sharedApplication] statusBarOrientation] ))
+    {
+        cameraRect = Rectf( vec2( 0.0f ), vec2( mCameraSize.y, mCameraSize.x ));
+        rotate = true;
+    }
+    
     gl::ScopedGlslProg glslProg( mYCbCrToRGBProg );
     gl::ScopedTextureBind yScp( texY, 0 );
     gl::ScopedTextureBind cbScp( texCb, 1 );
@@ -102,7 +113,8 @@ void Session::drawRGBCaptureTexture( Area area )
     mYCbCrToRGBProg->uniform( "u_YTex", 0 );
     mYCbCrToRGBProg->uniform( "u_CbTex", 1 );
     mYCbCrToRGBProg->uniform( "u_CrTex", 2 );
-    gl::drawSolidRect( area );
+    mYCbCrToRGBProg->uniform( "u_Rotate", rotate );
+    gl::drawSolidRect( cameraRect.getCenteredFit( area, true ));
 }
 
 std::vector<Anchor> Session::getAnchors()
@@ -166,6 +178,8 @@ std::vector<PlaneAnchor> Session::getPlaneAnchors()
     ciARKitSession->mFrameYChannel  = getChannelForCVPixelBuffer( pixelBuffer, 0 );
     ciARKitSession->mFrameCbChannel = getChannelForCVPixelBuffer( pixelBuffer, 1, 2, 0 );
     ciARKitSession->mFrameCrChannel = getChannelForCVPixelBuffer( pixelBuffer, 1, 2, 1 );
+    
+    ciARKitSession->mCameraSize = vec2( (float)CVPixelBufferGetWidth( pixelBuffer ), (float)CVPixelBufferGetHeight( pixelBuffer ));
 }
 
 // ===== ANCHOR HANDLING ===========================================================================================

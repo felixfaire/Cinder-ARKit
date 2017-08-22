@@ -131,6 +131,8 @@ public:
     
     bool                   mIsRunning = false;
     
+    vec2                   mCameraSize = vec2( 1.0f );
+    
     gl::GlslProgRef        mYCbCrToRGBProg;
     
 };

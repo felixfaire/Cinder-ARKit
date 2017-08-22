@@ -100,15 +100,27 @@ static gl::GlslProgRef getYCbCrToRBGGlslProgram()
             precision mediump float;
 
             uniform mat4 ciModelViewProjection;
+            uniform bool u_Rotate;
 
             attribute vec4 ciPosition;
             attribute vec2 ciTexCoord0;
 
             varying vec2 v_TexCoord;
+    
+            const float rotTheta = -3.1415926536 * 0.5;
+            const mat2 rot = mat2(cos(rotTheta), -sin(rotTheta), sin(rotTheta), cos(rotTheta));
 
             void main()
             {
                 v_TexCoord = ciTexCoord0;
+                
+                if (u_Rotate)
+                {
+                    v_TexCoord -= vec2( 0.5 );
+                    v_TexCoord = rot * v_TexCoord;
+                    v_TexCoord += vec2( 0.5 );
+                }
+                
                 gl_Position = ciModelViewProjection * ciPosition;
             }
     )";
