@@ -22,7 +22,6 @@ void BasicSampleApp::setup()
 {
     const auto fmt = ARKit::Session::Format().configuration( ARKit::Session::TrackingConfiguration::WorldTrackingWithHorizontalPlaneDetection );
     mARSession = ARKit::Session::create( fmt );
-    mARSession->setViewSize( getWindowSize() );
     mARSession->run();
 }
 

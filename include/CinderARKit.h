@@ -66,16 +66,13 @@ public:
         Format(){}
         Format& configuration( TrackingConfiguration config ) { mConfiguration = config; return *this; }
         Format& rgbCaptureEnabled( bool rgbEnabled ) { mRGBCaptureEnabled = rgbEnabled; return *this; }
-        Format& viewSize( vec2 viewSize ) { mViewSize = viewSize; return *this; }
         
         TrackingConfiguration mConfiguration = { WorldTrackingWithHorizontalPlaneDetection };
         bool                  mRGBCaptureEnabled = true;
-        vec2                  mViewSize = vec2( 0.1f );
     };
     
     static SessionRef create( Format format = Format() );
     
-    Session();
     Session( Format format = Format() );
     ~Session();
     
@@ -87,10 +84,6 @@ public:
          and orienation.
     */
     void addAnchorRelativeToCamera( vec3 offset );
-    
-    /**  Sets the size and aspect ratio of the view to calculate the projection matrix
-    */
-    void setViewSize( ivec2 newSize )   { mFormat.mViewSize = (vec2)newSize; }
 
     /**  Returns the luma texture for the current frame capture
     */
