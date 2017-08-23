@@ -19,7 +19,7 @@ This is the primary interface to ARKit. Creat one in your app by initialising it
 Calling run() on the Session will cause it to update in the background. You can pause the session by calling pause().
 
 ### - AR Camera View and Projection matrices:
-These allow you to track your phones real world 3D position and orientation in virtual 3D space.
+These allow you to track your phones real world 3D position and orientation in virtual 3D space. All matrix translation units are in real world meters.
 
 ### - Anchors:
 You can add tracked 3D positions (including their orientation) to your scene relative to the current camera position.
