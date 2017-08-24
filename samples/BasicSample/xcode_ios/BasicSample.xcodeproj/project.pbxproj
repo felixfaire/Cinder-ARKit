@@ -323,7 +323,6 @@
 			buildSettings = {
 				ARCHS = "$(ARCHS_STANDARD)";
 				DEBUG_INFORMATION_FORMAT = dwarf;
-				DEVELOPMENT_TEAM = H5M8J8RH6S;
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = BasicSample_Prefix.pch;
 				INFOPLIST_FILE = Info.plist;
@@ -347,7 +346,6 @@
 			buildSettings = {
 				ARCHS = "$(ARCHS_STANDARD)";
 				DEBUG_INFORMATION_FORMAT = dwarf;
-				DEVELOPMENT_TEAM = H5M8J8RH6S;
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = BasicSample_Prefix.pch;
 				INFOPLIST_FILE = Info.plist;
