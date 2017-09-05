@@ -1,6 +1,7 @@
 .DS_Store
 *.xcuserdatad
 *.xccheckout
+project.xcworkspace
 xcshareddata
 xcuserdata
 bin
