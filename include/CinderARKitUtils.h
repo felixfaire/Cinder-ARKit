@@ -46,10 +46,36 @@ static mat4 modelMatFromTransform( matrix_float4x4 transform )
     return toMat4( modelMat );
 }
 
+typedef std::string AnchorID;
+template <typename AnchorType>
+static void updateOrAddAnchor( std::vector<AnchorType>& anchorList, AnchorType anchor )
+{
+    const auto anchorID = anchor.mUid;
+    auto foundAnchor = std::find_if( anchorList.begin(),
+                                     anchorList.end(),
+                                     [anchorID](const AnchorType& a) -> bool { return (a.mUid == anchorID);} );
+    
+    if (foundAnchor != anchorList.end())
+        *foundAnchor = anchor;
+    else
+        anchorList.push_back(anchor);
+}
+
+template <typename AnchorType>
+static void removeAnchorWithID( std::vector<AnchorType>& anchors, AnchorID anchorID )
+{
+    std::remove_if( anchors.begin(), anchors.end(), [anchorID](const AnchorType& a) -> bool { return (a.mUid == anchorID); } );
+}
+
+static const std::string getUidStringFromUUID( NSUUID* uid)
+{
+    NSString* uidString = uid.UUIDString;
+    return std::string([uidString UTF8String], [uidString lengthOfBytesUsingEncoding:NSUTF8StringEncoding]);
+}
+
 static const std::string getUidStringFromAnchor( ARAnchor* anchor )
 {
-    NSString* uid = anchor.identifier.UUIDString;
-    return std::string([uid UTF8String], [uid lengthOfBytesUsingEncoding:NSUTF8StringEncoding]);
+    return getUidStringFromUUID( anchor.identifier );
 }
 
 
@@ -71,6 +97,11 @@ static ARConfiguration* getNativeARConfiguration( ARKit::Session::TrackingConfig
 
       case ARKit::Session::TrackingConfiguration::WorldTrackingWithHorizontalPlaneDetection:
         wtc.planeDetection = ARPlaneDetectionHorizontal;
+        arConfig = wtc;
+        break;
+        
+      case ARKit::Session::TrackingConfiguration::WorldTrackingWithVerticalPlaneDetection:
+        wtc.planeDetection = ARPlaneDetectionVertical;
         arConfig = wtc;
         break;
 

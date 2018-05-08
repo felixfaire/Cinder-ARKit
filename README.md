@@ -1,7 +1,7 @@
 # Cinder-ARKit
 
 A simple bridge between Apple ARKit and Cinder.
-(This block is under active development).
+(This block is very much beta software and does not yet expose all the new ARKit functionality, all contributions welcome).
 
 ## Setup Notes:
 

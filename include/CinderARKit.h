@@ -21,30 +21,36 @@ namespace ARKit {
 class Session;
 typedef std::shared_ptr<Session> SessionRef;
 
+typedef std::string AnchorID;
+
 /**  An anchor point that will be tracked by ARKit*/
 class Anchor
 {
 public:
     Anchor() {}
-    Anchor( mat4 transform )
-        : mTransform( transform ) {}
+    Anchor( std::string uid, mat4 transform )
+        : mUid( uid ),
+          mTransform( transform ) {}
     
-    mat4           mTransform;
+    AnchorID    mUid;
+    mat4        mTransform;
 };
 
 /**  An anchor point that includes plane position and extents*/
 class PlaneAnchor
 {
 public:
-    PlaneAnchor(){}
-    PlaneAnchor( mat4 transform, vec3 center, vec3 extent )
-        : mTransform( transform ),
+    PlaneAnchor() {}
+    PlaneAnchor( std::string uid, mat4 transform, vec3 center, vec3 extent )
+        : mUid( uid ),
+          mTransform( transform ),
           mCenter( center ),
           mExtent( extent ) {}
     
-    mat4 mTransform;
-    vec3 mCenter;
-    vec3 mExtent;
+    AnchorID        mUid;
+    mat4            mTransform;
+    vec3            mCenter;
+    vec3            mExtent;
 };
 
 class Session
@@ -55,7 +61,8 @@ public:
     {
         OrientationTracking,
         WorldTracking,
-        WorldTrackingWithHorizontalPlaneDetection
+        WorldTrackingWithHorizontalPlaneDetection,
+        WorldTrackingWithVerticalPlaneDetection,
     };
 
     /**  Format contains the options for the session when it is created
@@ -80,42 +87,47 @@ public:
     void runConfiguration( TrackingConfiguration config );
     void pause();
     
-    /**  Adds an anchor point to the ARSession relative from the current camera position
-         and orienation.
+    /**  Adds an anchor point to the ARSession relative to the current world orientation.
+         Returns the AnchorID of the anchor to reference later on.
     */
-    void addAnchorRelativeToCamera( vec3 offset );
+    const AnchorID addAnchorRelativeToWorld( vec3 position );
+    
+    /**  Adds an anchor point to the ARSession relative from the current camera position
+         and orienation. Returns the AnchorID of the anchor to reference later on.
+    */
+    const AnchorID addAnchorRelativeToCamera( vec3 offset );
 
     /**  Returns the luma texture for the current frame capture
     */
-    gl::Texture2dRef getFrameLumaTexture()    { return gl::Texture2d::create( mFrameYChannel ); }
+    gl::Texture2dRef getFrameLumaTexture() const   { return gl::Texture2d::create( mFrameYChannel ); }
     
     /**  Draws the converted rgb capture to the desired area
     */
-    void drawRGBCaptureTexture( Area area );
+    void drawRGBCaptureTexture( Area area ) const;
     
     /**  Returns the estimated light intensity for the scene
          0.0 (very dark) 1.0 (very bright)
     */
-    float getAmbientLightIntensity()        { return mAmbientLightIntensity; }
+    float getAmbientLightIntensity() const        { return mAmbientLightIntensity; }
     
     /**  Returns the estimated light color temperature for the scene in Kelvin
          (6500 is pure white)
     */
-    float getAmbientColorTemperature()      { return mAmbientColorTemperature; }
+    float getAmbientColorTemperature() const     { return mAmbientColorTemperature; }
     
     /**  Get the list of anchor transforms (points with orientations)
     */
-    std::vector<Anchor> getAnchors();
+    const std::vector<Anchor>& getAnchors() const { return mAnchors; }
     
-    /**  Get the list of plane anchor abjoects
+    /**  Get the full list of plane anchor objects
     */
-    std::vector<PlaneAnchor> getPlaneAnchors();
+    const std::vector<PlaneAnchor>& getPlaneAnchors() const { return mPlaneAnchors; }
     
-
-    // Currently members are publically exposed to Obj C Implementation
+    /**  Finds the anchor with a certain ID if it exists. Returns an empty
+         std::shared_ptr<Anchor> if it doesn't exist.
+    */
+    std::shared_ptr<Anchor> findAnchorWithID( AnchorID anchorID ) const;
     
-    std::map<std::string, Anchor>       mAnchors;
-    std::map<std::string, PlaneAnchor>  mPlaneAnchors;
     
     Channel8u              mFrameYChannel;
     Channel8u              mFrameCbChannel;
@@ -123,6 +135,12 @@ public:
 
     mat4                   mViewMatrix;
     mat4                   mProjectionMatrix;
+    
+    // Currently members are publically exposed to Obj C Implementation
+    // You shouldnt need to manipulate the Anchor arrays directly.
+    
+    std::vector<Anchor>       mAnchors;
+    std::vector<PlaneAnchor>  mPlaneAnchors;
     
     float                  mAmbientLightIntensity;
     float                  mAmbientColorTemperature;

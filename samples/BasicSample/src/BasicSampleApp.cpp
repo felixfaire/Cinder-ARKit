@@ -63,7 +63,7 @@ void BasicSampleApp::draw()
         gl::ScopedMatrices matScp;
         gl::setModelMatrix( a.mTransform );
         gl::translate( a.mCenter );
-        gl::rotate( M_PI*0.5f, vec3(1,0,0) ); // Make it parallel with the ground
+        gl::rotate( (float)M_PI * 0.5f, vec3(1,0,0) ); // Make it parallel with the ground
         const float xRad = a.mExtent.x * 0.5f;
         const float zRad = a.mExtent.z * 0.5f;
         gl::color( 0.0f, 0.6f, 0.9f, 0.2f );

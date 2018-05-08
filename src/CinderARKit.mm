@@ -19,7 +19,8 @@
 - (void)session:(ARSession*)session didUpdateAnchors:(NSArray<ARAnchor*>*)anchors;
 - (void)session:(ARSession*)session didRemoveAnchors:(NSArray<ARAnchor*>*)anchors;
 
-- (void)addAnchorWithxOffset:(NSNumber*)x yOffset:(NSNumber*)y zOffset:(NSNumber *)z;
+- (NSUUID*)addAnchorRelativeToWorldWithxPos:(NSNumber*)x yPos:(NSNumber*)y zPos:(NSNumber*)z;
+- (NSUUID*)addAnchorRelativeToCameraWithxOffset:(NSNumber*)x yOffset:(NSNumber*)y zOffset:(NSNumber*)z;
 
 @end
 
@@ -81,12 +82,23 @@ void Session::pause()
     [ciARKitSessionImpl->mARSession pause];
 }
 
-void Session::addAnchorRelativeToCamera( vec3 offset )
+std::shared_ptr<Anchor> Session::findAnchorWithID( AnchorID anchorID ) const
 {
-    [ciARKitSessionImpl addAnchorWithxOffset:@(offset.x) yOffset:@(offset.y) zOffset:@(offset.z)];
+    const auto foundAnchor = std::find_if( mAnchors.begin(), mAnchors.end(), [anchorID](const Anchor& a) { return (a.mUid == anchorID); });
+    
+    if (foundAnchor != mAnchors.end())
+        return std::make_shared<Anchor>( *foundAnchor );
+    
+    return nullptr;
 }
 
-void Session::drawRGBCaptureTexture( Area area )
+const AnchorID Session::addAnchorRelativeToCamera( vec3 offset )
+{
+    NSUUID* uid = [ciARKitSessionImpl addAnchorRelativeToCameraWithxOffset:@(offset.x) yOffset:@(offset.y) zOffset:@(offset.z)];
+    return getUidStringFromUUID(uid);
+}
+
+void Session::drawRGBCaptureTexture( Area area ) const
 {
     if (!mIsRunning)
         return;
@@ -116,28 +128,6 @@ void Session::drawRGBCaptureTexture( Area area )
     mYCbCrToRGBProg->uniform( "u_Rotate", rotate );
     gl::drawSolidRect( cameraRect.getCenteredFill( area, true ));
 }
-
-std::vector<Anchor> Session::getAnchors()
-{
-    std::vector<Anchor> anchors;
-    
-    for (const auto& a : mAnchors)
-        anchors.push_back( a.second );
-    
-    return anchors;
-}
-
-std::vector<PlaneAnchor> Session::getPlaneAnchors()
-{
-    std::vector<PlaneAnchor> planeAnchors;
-    
-    for (const auto& a : mPlaneAnchors)
-        planeAnchors.push_back( a.second );
-    
-    return planeAnchors;
-}
-
-
 
 
 
@@ -187,14 +177,16 @@ std::vector<PlaneAnchor> Session::getPlaneAnchors()
 {
     for (ARAnchor* anchor in anchors)
     {
+        const auto uid = getUidStringFromAnchor( anchor );
+        
         if ([anchor isKindOfClass:[ARPlaneAnchor class]])
         {
             ARPlaneAnchor* pa = (ARPlaneAnchor*)anchor;
-            ciARKitSession->mPlaneAnchors[getUidStringFromAnchor( pa )] = PlaneAnchor( toMat4( pa.transform ), toVec3( pa.center ), toVec3( pa.extent ));
+            updateOrAddAnchor(ciARKitSession->mPlaneAnchors, PlaneAnchor( uid, toMat4( pa.transform ), toVec3( pa.center ), toVec3( pa.extent )));
         }
         else
         {
-            ciARKitSession->mAnchors[getUidStringFromAnchor( anchor )] = Anchor( toMat4( anchor.transform ));
+            updateOrAddAnchor(ciARKitSession->mAnchors, Anchor( uid, toMat4( anchor.transform )));
         }
     }
 }
@@ -203,14 +195,16 @@ std::vector<PlaneAnchor> Session::getPlaneAnchors()
 {
     for (ARAnchor* anchor in anchors)
     {
+        const auto uid = getUidStringFromAnchor( anchor );
+        
         if ( [anchor isKindOfClass:[ARPlaneAnchor class]] )
         {
             ARPlaneAnchor* pa = (ARPlaneAnchor*)anchor;
-            ciARKitSession->mPlaneAnchors[getUidStringFromAnchor( pa )] = PlaneAnchor( toMat4( pa.transform ), toVec3( pa.center ), toVec3( pa.extent ));
+            updateOrAddAnchor(ciARKitSession->mPlaneAnchors, PlaneAnchor( uid, toMat4( pa.transform ), toVec3( pa.center ), toVec3( pa.extent )));
         }
         else
         {
-            ciARKitSession->mAnchors[getUidStringFromAnchor( anchor )] = Anchor( toMat4( anchor.transform ));
+            updateOrAddAnchor(ciARKitSession->mAnchors, Anchor( uid, toMat4( anchor.transform )));
         }
     }
 }
@@ -218,12 +212,43 @@ std::vector<PlaneAnchor> Session::getPlaneAnchors()
 - (void)session:(ARSession *)session didRemoveAnchors:(NSArray<ARAnchor*>*)anchors
 {
     for (ARAnchor* anchor in anchors)
-        ciARKitSession->mAnchors.erase( getUidStringFromAnchor( anchor ));
+    {
+        if ( [anchor isKindOfClass:[ARPlaneAnchor class]] )
+            removeAnchorWithID( ciARKitSession->mPlaneAnchors, getUidStringFromAnchor( anchor ));
+        else
+            removeAnchorWithID( ciARKitSession->mAnchors, getUidStringFromAnchor( anchor ));
+    }
 }
 
-- (void)addAnchorWithxOffset:(NSNumber*)x yOffset:(NSNumber*)y zOffset:(NSNumber*)z;
+- (NSUUID*)addAnchorRelativeToWorldWithxPos:(NSNumber*)x yPos:(NSNumber*)y zPos:(NSNumber*)z;
 {
     ARFrame* currentFrame = [mARSession currentFrame];
+    NSUUID* anchorID;
+    
+    // Create anchor using the camera's current position
+    if (currentFrame)
+    {
+        // Create a transform relative to the camera view
+        matrix_float4x4 translation = matrix_identity_float4x4;
+        translation.columns[3].x = [x floatValue];
+        translation.columns[3].z = [y floatValue];
+        translation.columns[3].z = [z floatValue];
+        ARAnchor *anchor = [[ARAnchor alloc] initWithTransform:translation];
+        anchorID = anchor.identifier;
+        [mARSession addAnchor:anchor];
+    }
+    else
+    {
+        CI_ASSERT_MSG(false, "No current ARFrame, this will return an invalid anchor");
+    }
+    
+    return anchorID;
+}
+
+- (NSUUID*)addAnchorRelativeToCameraWithxOffset:(NSNumber*)x yOffset:(NSNumber*)y zOffset:(NSNumber*)z;
+{
+    ARFrame* currentFrame = [mARSession currentFrame];
+    NSUUID* anchorID;
     
     // Create anchor using the camera's current position
     if (currentFrame)
@@ -235,8 +260,15 @@ std::vector<PlaneAnchor> Session::getPlaneAnchors()
         translation.columns[3].z = [z floatValue];
         matrix_float4x4 transform = matrix_multiply(currentFrame.camera.transform, translation);
         ARAnchor *anchor = [[ARAnchor alloc] initWithTransform:transform];
+        anchorID = anchor.identifier;
         [mARSession addAnchor:anchor];
     }
+    else
+    {
+        CI_ASSERT_MSG(false, "No current ARFrame, this will return an invalid anchor");
+    }
+    
+    return anchorID;
 }
 
 
