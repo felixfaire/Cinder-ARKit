@@ -120,12 +120,15 @@ bool SessionImpl::isInterfaceInPortraitOrientation() const
     ciARKitSession->mAmbientColorTemperature = (float)[[frame lightEstimate] ambientColorTemperature];
     
     // Capture pixel YCbCr
-    CVPixelBufferRef pixelBuffer = frame.capturedImage;
-    ciARKitSession->mFrameYChannel  = getChannelForCVPixelBuffer( pixelBuffer, 0 );
-    ciARKitSession->mFrameCbChannel = getChannelForCVPixelBuffer( pixelBuffer, 1, 2, 0 );
-    ciARKitSession->mFrameCrChannel = getChannelForCVPixelBuffer( pixelBuffer, 1, 2, 1 );
-    
-    ciARKitSession->mCameraSize = vec2( (float)CVPixelBufferGetWidth( pixelBuffer ), (float)CVPixelBufferGetHeight( pixelBuffer ));
+    if (ciARKitSession->mRGBCaptureEnabled)
+    {
+        CVPixelBufferRef pixelBuffer = frame.capturedImage;
+        ciARKitSession->mFrameYChannel  = getChannelForCVPixelBuffer( pixelBuffer, 0 );
+        ciARKitSession->mFrameCbChannel = getChannelForCVPixelBuffer( pixelBuffer, 1, 2, 0 );
+        ciARKitSession->mFrameCrChannel = getChannelForCVPixelBuffer( pixelBuffer, 1, 2, 1 );
+        
+        ciARKitSession->mCameraSize = vec2( (float)CVPixelBufferGetWidth( pixelBuffer ), (float)CVPixelBufferGetHeight( pixelBuffer ));
+    }
 }
 
 
