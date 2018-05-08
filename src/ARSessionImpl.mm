@@ -1,5 +1,5 @@
 //
-//  CinderARKit.mm
+//  ARSessionImpl.mm
 //  CinderARKit
 //
 //  Created by Felix Faire on 11/08/2017.
@@ -9,7 +9,7 @@
 #import <Foundation/Foundation.h>
 #import <ARKit/ARKit.h>
 
-@interface ARKitSessionImpl : NSObject<ARSessionDelegate>
+@interface AppleARKitSessionImpl : NSObject<ARSessionDelegate>
 {
 @public
     ARSession*       mARSession;
@@ -24,114 +24,70 @@
 
 @end
 
-#import "CinderARKit.h"
+#import "ARSessionImpl.h"
 #import "CinderARKitUtils.h"
 
 #include "cinder/gl/gl.h"
 
+
+// Global instances of the AR session to bridge C++ and Obj C
+static AppleARKitSessionImpl* appleARKitSession = nil;   // Apple ARKit API
+static ARKit::SessionImpl*    ciARKitSession = nullptr;       // Cinder ARKit Bridge
+
+
 using namespace ARKit;
 
-// Global instances of the session to bridge C++ and Obj C
-static ARKitSessionImpl* ciARKitSessionImpl = nil;
-static Session* ciARKitSession = nullptr;
-
-SessionRef Session::create( Session::Format format )
-{
-    return std::make_shared<Session>( format );
-}
-
-Session::Session( Session::Format format )
-    : mFormat( format )
+// Cinder ARKit Session implementation
+SessionImpl::SessionImpl()
 {
     // You already have an ARSession instance running
     DBG_ASSERT(ciARKitSession == nullptr)
     
     ciARKitSession = this;
-    
-    mYCbCrToRGBProg = getYCbCrToRBGGlslProgram();
 
-    if (ciARKitSessionImpl == nil)
+    if (appleARKitSession == nil)
     {
-        ciARKitSessionImpl = [[ARKitSessionImpl alloc] init];
+        appleARKitSession = [[AppleARKitSessionImpl alloc] init];
         
-        DBG_ASSERT(ciARKitSessionImpl);
+        DBG_ASSERT(appleARKitSession);
     }
 }
 
-Session::~Session()
+SessionImpl::~SessionImpl()
 {
     DBG_ASSERT(ciARKitSession == this);
     ciARKitSession = nullptr;
 }
 
-void Session::run()
+void SessionImpl::runConfiguration( TrackingConfiguration config )
 {
-    runConfiguration( mFormat.mConfiguration );
-}
-
-void Session::runConfiguration( TrackingConfiguration config )
-{
-    mFormat.mConfiguration = config;
     ARConfiguration* configuration = getNativeARConfiguration( config );
-    [ciARKitSessionImpl->mARSession runWithConfiguration:configuration];
+    [appleARKitSession->mARSession runWithConfiguration:configuration];
 }
 
-void Session::pause()
+void SessionImpl::pause()
 {
     mIsRunning = false;
-    [ciARKitSessionImpl->mARSession pause];
+    [appleARKitSession->mARSession pause];
 }
 
-std::shared_ptr<Anchor> Session::findAnchorWithID( AnchorID anchorID ) const
+const AnchorID SessionImpl::addAnchorRelativeToCamera( vec3 offset )
 {
-    const auto foundAnchor = std::find_if( mAnchors.begin(), mAnchors.end(), [anchorID](const Anchor& a) { return (a.mUid == anchorID); });
-    
-    if (foundAnchor != mAnchors.end())
-        return std::make_shared<Anchor>( *foundAnchor );
-    
-    return nullptr;
-}
-
-const AnchorID Session::addAnchorRelativeToCamera( vec3 offset )
-{
-    NSUUID* uid = [ciARKitSessionImpl addAnchorRelativeToCameraWithxOffset:@(offset.x) yOffset:@(offset.y) zOffset:@(offset.z)];
+    NSUUID* uid = [appleARKitSession addAnchorRelativeToCameraWithxOffset:@(offset.x) yOffset:@(offset.y) zOffset:@(offset.z)];
     return getUidStringFromUUID(uid);
 }
 
-void Session::drawRGBCaptureTexture( Area area ) const
+bool SessionImpl::isInterfaceInPortraitOrientation() const
 {
-    if (!mIsRunning)
-        return;
-    
-    const auto texY  = gl::Texture2d::create( mFrameYChannel );
-    const auto texCr = gl::Texture2d::create( mFrameCrChannel );
-    const auto texCb = gl::Texture2d::create( mFrameCbChannel );
-    
-    auto cameraRect = Rectf( vec2( 0.0f ), mCameraSize );
-    bool rotate = false;
-    
-    gl::ScopedMatrices matScp;
-    
-    if (UIInterfaceOrientationIsPortrait( [[UIApplication sharedApplication] statusBarOrientation] ))
-    {
-        cameraRect = Rectf( vec2( 0.0f ), vec2( mCameraSize.y, mCameraSize.x ));
-        rotate = true;
-    }
-    
-    gl::ScopedGlslProg glslProg( mYCbCrToRGBProg );
-    gl::ScopedTextureBind yScp( texY, 0 );
-    gl::ScopedTextureBind cbScp( texCb, 1 );
-    gl::ScopedTextureBind crScp( texCr, 2 );
-    mYCbCrToRGBProg->uniform( "u_YTex", 0 );
-    mYCbCrToRGBProg->uniform( "u_CbTex", 1 );
-    mYCbCrToRGBProg->uniform( "u_CrTex", 2 );
-    mYCbCrToRGBProg->uniform( "u_Rotate", rotate );
-    gl::drawSolidRect( cameraRect.getCenteredFill( area, true ));
+    return UIInterfaceOrientationIsPortrait( [[UIApplication sharedApplication] statusBarOrientation] );
 }
 
 
 
-@implementation ARKitSessionImpl
+
+// Apple ARKit API Bridge implementation
+
+@implementation AppleARKitSessionImpl
 
 - (id) init
 {
@@ -172,7 +128,9 @@ void Session::drawRGBCaptureTexture( Area area ) const
     ciARKitSession->mCameraSize = vec2( (float)CVPixelBufferGetWidth( pixelBuffer ), (float)CVPixelBufferGetHeight( pixelBuffer ));
 }
 
+
 // ===== ANCHOR HANDLING ===========================================================================================
+
 - (void)session:(ARSession *)session didAddAnchors:(NSArray<ARAnchor*>*)anchors
 {
     for (ARAnchor* anchor in anchors)
