@@ -10,6 +10,7 @@
 		0087D25512CD809F002CD69F /* CoreText.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 0087D25412CD809F002CD69F /* CoreText.framework */; };
 		00A66A361965AC8800B17EB3 /* Accelerate.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 00A66A351965AC8800B17EB3 /* Accelerate.framework */; };
 		00CFDF6B1138442D0091E310 /* CoreGraphics.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 00CFDF6A1138442D0091E310 /* CoreGraphics.framework */; };
+		0782B65920A200810047F930 /* CinderARKit.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 0782B65820A200810047F930 /* CinderARKit.cpp */; };
 		1D60589F0D05DD5A006BFB54 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 1D30AB110D05D00D00671497 /* Foundation.framework */; };
 		1DF5F4E00D08C38300B7A737 /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 1DF5F4DF0D08C38300B7A737 /* UIKit.framework */; };
 		28FD15000DC6FC520079059D /* OpenGLES.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 28FD14FF0DC6FC520079059D /* OpenGLES.framework */; };
@@ -24,7 +25,7 @@
 		C727C02E121B400300192073 /* CoreVideo.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = C727C02D121B400300192073 /* CoreVideo.framework */; settings = {ATTRIBUTES = (Weak, ); }; };
 		C7FB19D6124BC0D70045AFD2 /* AudioToolbox.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = C7FB19D5124BC0D70045AFD2 /* AudioToolbox.framework */; };
 		DDDDE001121DAC8FFFFADDDD /* MobileCoreServices.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = DDDDDF6A1138442D0091DDDD /* MobileCoreServices.framework */; };
-		E90AF11E3BC14567928A8AB7 /* CinderARKit.mm in Sources */ = {isa = PBXBuildFile; fileRef = 14FA589DCE9E4803B40BEA80 /* CinderARKit.mm */; };
+		E90AF11E3BC14567928A8AB7 /* ARSessionImpl.mm in Sources */ = {isa = PBXBuildFile; fileRef = 14FA589DCE9E4803B40BEA80 /* ARSessionImpl.mm */; };
 		E9BFF142EC724E1CB6961F9A /* ARKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 50D0E81DBD364C2B82F1DFC9 /* ARKit.framework */; };
 /* End PBXBuildFile section */
 
@@ -34,8 +35,11 @@
 		00A66A351965AC8800B17EB3 /* Accelerate.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Accelerate.framework; path = System/Library/Frameworks/Accelerate.framework; sourceTree = SDKROOT; };
 		00CFDF6A1138442D0091E310 /* CoreGraphics.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreGraphics.framework; path = System/Library/Frameworks/CoreGraphics.framework; sourceTree = SDKROOT; };
 		00CFDF6A1138442D0091FFFF /* ImageIO.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = ImageIO.framework; path = System/Library/Frameworks/ImageIO.framework; sourceTree = SDKROOT; };
+		0782B65620A1F2D70047F930 /* ARSessionImpl.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = ARSessionImpl.h; path = ../../../include/ARSessionImpl.h; sourceTree = "<group>"; };
+		0782B65720A1F2D70047F930 /* ARAnchorTypes.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = ARAnchorTypes.h; path = ../../../include/ARAnchorTypes.h; sourceTree = "<group>"; };
+		0782B65820A200810047F930 /* CinderARKit.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = CinderARKit.cpp; path = ../../../src/CinderARKit.cpp; sourceTree = "<group>"; };
 		0BBAB31322504E45B9359045 /* BasicSampleApp.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.cpp; name = BasicSampleApp.cpp; path = ../src/BasicSampleApp.cpp; sourceTree = "<group>"; };
-		14FA589DCE9E4803B40BEA80 /* CinderARKit.mm */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.objcpp; name = CinderARKit.mm; path = ../../../src/CinderARKit.mm; sourceTree = "<group>"; };
+		14FA589DCE9E4803B40BEA80 /* ARSessionImpl.mm */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.objcpp; name = ARSessionImpl.mm; path = ../../../src/ARSessionImpl.mm; sourceTree = "<group>"; };
 		1D30AB110D05D00D00671497 /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = System/Library/Frameworks/Foundation.framework; sourceTree = SDKROOT; };
 		1DF5F4DF0D08C38300B7A737 /* UIKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = UIKit.framework; path = System/Library/Frameworks/UIKit.framework; sourceTree = SDKROOT; };
 		26FD41F7115B4E2DAC0C1378 /* Resources.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = Resources.h; path = ../include/Resources.h; sourceTree = "<group>"; };
@@ -144,6 +148,8 @@
 		8E484DD82FF64C5491F9A190 /* include */ = {
 			isa = PBXGroup;
 			children = (
+				0782B65720A1F2D70047F930 /* ARAnchorTypes.h */,
+				0782B65620A1F2D70047F930 /* ARSessionImpl.h */,
 				56F741FF31F4400288EA8E10 /* CinderARKit.h */,
 				A8A6D3427D58442392C42A53 /* CinderARKitUtils.h */,
 			);
@@ -170,7 +176,8 @@
 		C1E758BC33424E1FB154FA16 /* src */ = {
 			isa = PBXGroup;
 			children = (
-				14FA589DCE9E4803B40BEA80 /* CinderARKit.mm */,
+				14FA589DCE9E4803B40BEA80 /* ARSessionImpl.mm */,
+				0782B65820A200810047F930 /* CinderARKit.cpp */,
 			);
 			name = src;
 			sourceTree = "<group>";
@@ -245,7 +252,8 @@
 			buildActionMask = 2147483647;
 			files = (
 				3050CF968FF4482F9EC0232B /* BasicSampleApp.cpp in Sources */,
-				E90AF11E3BC14567928A8AB7 /* CinderARKit.mm in Sources */,
+				0782B65920A200810047F930 /* CinderARKit.cpp in Sources */,
+				E90AF11E3BC14567928A8AB7 /* ARSessionImpl.mm in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
