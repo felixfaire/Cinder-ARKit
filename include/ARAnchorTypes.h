@@ -45,21 +45,22 @@ public:
     vec3            mCenter;
     vec3            mExtent;
 };
-    
+
+/**  An anchor point from a tracked image*/
 class ImageAnchor
 {
 public:
     ImageAnchor(){}
     ImageAnchor(  std::string uid, mat4 transform, vec2 physicalSize, std::string imageName )
-    : mUid( uid ),
-    mTransform( transform ),
-    mPhysicalSize( physicalSize ),
-    mImageName (imageName){}
+        : mUid( uid ),
+        mTransform( transform ),
+        mPhysicalSize( physicalSize ),
+        mImageName (imageName){}
     
     AnchorID        mUid;
-    mat4 mTransform;
-    vec2 mPhysicalSize;
-    std::string mImageName;
+    mat4            mTransform;
+    vec2            mPhysicalSize;
+    std::string     mImageName;
     
 };
 

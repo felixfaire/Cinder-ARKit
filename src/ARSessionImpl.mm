@@ -144,7 +144,8 @@ bool SessionImpl::isInterfaceInPortraitOrientation() const
         {
             ARPlaneAnchor* pa = (ARPlaneAnchor*)anchor;
             updateOrAddAnchor(ciARKitSession->mPlaneAnchors, PlaneAnchor( uid, toMat4( pa.transform ), toVec3( pa.center ), toVec3( pa.extent )));
-        } else if ([anchor isKindOfClass:[ARImageAnchor class]])
+        }
+        else if ([anchor isKindOfClass:[ARImageAnchor class]])
         {
             ARImageAnchor* ia = (ARImageAnchor*)anchor;
             CGSize physSize = [[ia referenceImage] physicalSize];
@@ -168,7 +169,8 @@ bool SessionImpl::isInterfaceInPortraitOrientation() const
         {
             ARPlaneAnchor* pa = (ARPlaneAnchor*)anchor;
             updateOrAddAnchor(ciARKitSession->mPlaneAnchors, PlaneAnchor( uid, toMat4( pa.transform ), toVec3( pa.center ), toVec3( pa.extent )));
-        } else if ( [anchor isKindOfClass:[ARImageAnchor class]] )
+        }
+        else if ( [anchor isKindOfClass:[ARImageAnchor class]] )
         {
             ARImageAnchor* ia = (ARImageAnchor*)anchor;
             CGSize physSize = [[ia referenceImage] physicalSize];
