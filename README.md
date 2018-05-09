@@ -1,12 +1,12 @@
 # Cinder-ARKit
 
-A simple bridge between Apple ARKit and Cinder.
-(This block is very much beta software and does not yet expose all the new ARKit functionality, all contributions welcome).
+A simple bridge between Apples ARKit and Cinder.
+(This block is very much beta software and does not yet expose all the new ARKit functionality, all suggestions / contributions welcome).
 
 ## Setup Notes:
 
-- You must have Xcode 9.0 and iOS 11 or later to use ARKit
-- In your xcode project General settings change the team to your personal development team. Also set your Deployment Target to ios 11.0.
+- You must have Xcode 9.0 and iOS 11.0 or later to use ARKit (11.3 or later to use Image Tracking)
+- In your xcode project General settings change the team to your personal development team. Also set your Deployment Target to ios 11.3.
 - In your project info.plist file add a new "Privacy - Camera Usage Description" key (so your app can use the camera).
 - Run the BasicSample app to get an idea of how the Session object works.
 - Check out CinderARkit.h for more information.
@@ -15,14 +15,13 @@ A simple bridge between Apple ARKit and Cinder.
 The functionality of this cinder block tries to stay fairly close to the original API so you can find more top level info of what ARKit provides here https://developer.apple.com/arkit/
 
 ### - ARKit Session
-This is the primary interface to ARKit. Creat one in your app by initialising it with an ARTrackingConfiguration (Orientation only, WorldTracking or WorldTrackingWIthHorizontalPlaneDetection).
-Calling run() on the Session will cause it to update in the background. You can pause the session by calling pause().
+This is the primary interface to ARKit. It wont do anything until you call runConfiguration() with a SessionConfiguration, this specifies whether you want WorldTracking, OrientationTracking, PlaneDetection etc.
 
 ### - AR Camera View and Projection matrices:
 These allow you to track your phones real world 3D position and orientation in virtual 3D space. All matrix translation units are in real world meters.
 
 ### - Anchors:
-You can add tracked 3D positions (including their orientation) to your scene relative to the current camera position.
+You can add tracked 3D positions (including their orientation) to your scene relative to the current camera position (or straight in AR world coordinates).
 (These points will be updated / adjusted behind the scenes by ARKit to provide the most coherent / accurate spatial model).
 
 ### - PlaneAnchors:
@@ -36,4 +35,5 @@ The Session features a light intensity estimate (0.0 for very dark and 1.0 for v
 The Session provides a convenience function to draw the camera capture directly to the screen so you can overlay 3D information on the camera image.
 (The Session has to convert the captured image from YCrCb space to RGB and uses in built shaders to do this, if you want an RGB texture of the camera capture I would suggest using this function to render to an Fbo and then using the texture from that)
 
-
+### - Image Tracking:
+ARKit can recognise images in the real work and create ImageAnchors from them in virtual space. See the ImageTracking example for more.
