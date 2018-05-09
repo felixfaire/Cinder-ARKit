@@ -104,6 +104,11 @@ static ARConfiguration* getNativeARConfiguration( ARKit::TrackingConfiguration c
         wtc.planeDetection = ARPlaneDetectionVertical;
         arConfig = wtc;
         break;
+            
+      case ARKit::TrackingConfiguration::ReferenceImageTrackingConfiguration:
+        wtc.detectionImages = [ARReferenceImage referenceImagesInGroupNamed:@"AR Resources" bundle: nil];
+        arConfig = wtc;
+        break;
 
       default:
         // AR Tracking Configuration not implemented

@@ -23,6 +23,7 @@ float Session::getAmbientLightIntensity() const                     { return mSe
 float Session::getAmbientColorTemperature() const                   { return mSessionImpl.mAmbientColorTemperature; }
 const std::vector<Anchor>& Session::getAnchors() const              { return mSessionImpl.mAnchors; }
 const std::vector<PlaneAnchor>& Session::getPlaneAnchors() const    { return mSessionImpl.mPlaneAnchors; }
+const std::vector<ImageAnchor>& Session::getImageAnchors() const    { return mSessionImpl.mImageAnchors; }
 void Session::setRGBCaptureEnabled( bool captureEnabled )           { mSessionImpl.mRGBCaptureEnabled = captureEnabled; }
 const mat4 Session::getViewMatrix() const                           { return mSessionImpl.mViewMatrix; }
 const mat4 Session::getProjectionMatrix() const                     { return mSessionImpl.mProjectionMatrix; }

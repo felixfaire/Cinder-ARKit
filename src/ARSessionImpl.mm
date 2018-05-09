@@ -144,6 +144,12 @@ bool SessionImpl::isInterfaceInPortraitOrientation() const
         {
             ARPlaneAnchor* pa = (ARPlaneAnchor*)anchor;
             updateOrAddAnchor(ciARKitSession->mPlaneAnchors, PlaneAnchor( uid, toMat4( pa.transform ), toVec3( pa.center ), toVec3( pa.extent )));
+        } else if ([anchor isKindOfClass:[ARImageAnchor class]])
+        {
+            ARImageAnchor* ia = (ARImageAnchor*)anchor;
+            CGSize physSize = [[ia referenceImage] physicalSize];
+            //[session setWorldOrigin:ia.transform];
+            updateOrAddAnchor(ciARKitSession->mImageAnchors, ImageAnchor( uid, toMat4( ia.transform ), glm::vec2(physSize.width, physSize.height), [[[ia referenceImage] name] UTF8String]));
         }
         else
         {
@@ -162,6 +168,12 @@ bool SessionImpl::isInterfaceInPortraitOrientation() const
         {
             ARPlaneAnchor* pa = (ARPlaneAnchor*)anchor;
             updateOrAddAnchor(ciARKitSession->mPlaneAnchors, PlaneAnchor( uid, toMat4( pa.transform ), toVec3( pa.center ), toVec3( pa.extent )));
+        } else if ( [anchor isKindOfClass:[ARImageAnchor class]] )
+        {
+            ARImageAnchor* ia = (ARImageAnchor*)anchor;
+            CGSize physSize = [[ia referenceImage] physicalSize];
+            //[session setWorldOrigin:ia.transform];
+            updateOrAddAnchor(ciARKitSession->mImageAnchors, ImageAnchor( uid, toMat4( ia.transform ), glm::vec2(physSize.width, physSize.height), [[[ia referenceImage] name] UTF8String]));
         }
         else
         {
@@ -176,6 +188,8 @@ bool SessionImpl::isInterfaceInPortraitOrientation() const
     {
         if ( [anchor isKindOfClass:[ARPlaneAnchor class]] )
             removeAnchorWithID( ciARKitSession->mPlaneAnchors, getUidStringFromAnchor( anchor ));
+        else if ( [anchor isKindOfClass:[ARImageAnchor class]] )
+            removeAnchorWithID( ciARKitSession->mImageAnchors, getUidStringFromAnchor( anchor ));
         else
             removeAnchorWithID( ciARKitSession->mAnchors, getUidStringFromAnchor( anchor ));
     }
