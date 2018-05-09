@@ -25,10 +25,14 @@ void ImageTrackingApp::setup()
     // You must set the image size of the asset in real world units.
     // The image in this demo is set to 12cm x 12cm which is roughly the size of the
     // image when you open it in preview.
-    mARSession.runConfiguration(ARKit::TrackingConfiguration::ReferenceImageTrackingConfiguration);
+    
+    auto config = ARKit::SessionConfiguration()
+                        .imageTrackingEnabled( true )
+                        .trackingType( ARKit::TrackingType::WorldTracking );
+    mARSession.runConfiguration( config );
     
     // This texture is just used for visualisation
-    mTexture = gl::Texture2d::create(loadImage(loadAsset("kandinsky.png")));
+    mTexture = gl::Texture2d::create( loadImage( loadAsset( "kandinsky.png" )));
 }
 
 void ImageTrackingApp::update()

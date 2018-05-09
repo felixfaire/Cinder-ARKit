@@ -216,6 +216,8 @@
 /* Begin PBXProject section */
 		00692BC614FF149000D0A05E /* Project object */ = {
 			isa = PBXProject;
+			attributes = {
+			};
 			buildConfigurationList = 00692BC914FF149000D0A05E /* Build configuration list for PBXProject "BasicSample" */;
 			compatibilityVersion = "Xcode 3.2";
 			developmentRegion = English;
@@ -331,6 +333,7 @@
 			buildSettings = {
 				ARCHS = "$(ARCHS_STANDARD)";
 				DEBUG_INFORMATION_FORMAT = dwarf;
+				DEVELOPMENT_TEAM = "";
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = BasicSample_Prefix.pch;
 				INFOPLIST_FILE = Info.plist;
@@ -354,6 +357,7 @@
 			buildSettings = {
 				ARCHS = "$(ARCHS_STANDARD)";
 				DEBUG_INFORMATION_FORMAT = dwarf;
+				DEVELOPMENT_TEAM = "";
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = BasicSample_Prefix.pch;
 				INFOPLIST_FILE = Info.plist;

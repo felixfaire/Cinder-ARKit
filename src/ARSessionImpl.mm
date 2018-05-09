@@ -59,7 +59,7 @@ SessionImpl::~SessionImpl()
     ciARKitSession = nullptr;
 }
 
-void SessionImpl::runConfiguration( TrackingConfiguration config )
+void SessionImpl::runConfiguration( SessionConfiguration config )
 {
     ARConfiguration* configuration = getNativeARConfiguration( config );
     [appleARKitSession->mARSession runWithConfiguration:configuration];

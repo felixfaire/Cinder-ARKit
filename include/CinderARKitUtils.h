@@ -79,43 +79,49 @@ static const std::string getUidStringFromAnchor( ARAnchor* anchor )
 }
 
 
-static ARConfiguration* getNativeARConfiguration( ARKit::TrackingConfiguration config )
+static ARConfiguration* getNativeARConfiguration( ARKit::SessionConfiguration config )
 {
+    if (config.mTrackingType == ARKit::TrackingType::OrientationTracking)
+    {
+        if (config.mPlaneDetection != PlaneDetection::None)
+        {
+            cinder::app::console() << "Error: Cannot use plane detection with OrientationTracking, use WorldTracking instead" << std::endl;
+            DBG_ASSERT(false);
+        }
+        
+        if (config.mImageTrackingEnabled != false)
+        {
+            cinder::app::console() << "Error: Cannot use image tracking with OrientationTracking, use WorldTracking instead" << std::endl;
+            DBG_ASSERT(false);
+        }
+    
+        return [AROrientationTrackingConfiguration new];
+    }
+    
+    DBG_ASSERT(config.mTrackingType == ARKit::TrackingType::WorldTracking);
+    
     ARConfiguration* arConfig;
     ARWorldTrackingConfiguration* wtc = [ARWorldTrackingConfiguration new];
-    
-    switch (config)
+
+    switch (config.mPlaneDetection)
     {
-      case ARKit::TrackingConfiguration::OrientationTracking:
-        arConfig = [AROrientationTrackingConfiguration new];
-        break;
-        
-      case ARKit::TrackingConfiguration::WorldTracking:
-        wtc.planeDetection = ARPlaneDetectionNone;
-        arConfig = wtc;
-        break;
-
-      case ARKit::TrackingConfiguration::WorldTrackingWithHorizontalPlaneDetection:
-        wtc.planeDetection = ARPlaneDetectionHorizontal;
-        arConfig = wtc;
-        break;
-        
-      case ARKit::TrackingConfiguration::WorldTrackingWithVerticalPlaneDetection:
-        wtc.planeDetection = ARPlaneDetectionVertical;
-        arConfig = wtc;
-        break;
-            
-      case ARKit::TrackingConfiguration::ReferenceImageTrackingConfiguration:
-        wtc.detectionImages = [ARReferenceImage referenceImagesInGroupNamed:@"AR Resources" bundle: nil];
-        arConfig = wtc;
-        break;
-
-      default:
-        // AR Tracking Configuration not implemented
-        DBG_ASSERT(false);
-        arConfig = [ARWorldTrackingConfiguration new];
-        break;
+        case (ARKit::PlaneDetection::None):
+          wtc.planeDetection = ARPlaneDetectionNone;
+          break;
+          
+        case (ARKit::PlaneDetection::Horizontal):
+          wtc.planeDetection = ARPlaneDetectionHorizontal;
+          break;
+          
+        case (ARKit::PlaneDetection::Vertical):
+          wtc.planeDetection = ARPlaneDetectionVertical;
+          break;
     }
+    
+    if (config.mImageTrackingEnabled)
+        wtc.detectionImages = [ARReferenceImage referenceImagesInGroupNamed:@"AR Resources" bundle: nil];
+    
+    arConfig = wtc;
     
     return arConfig;
 }

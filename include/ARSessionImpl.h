@@ -15,13 +15,33 @@ using namespace ci;
 
 namespace ARKit {
 
-enum TrackingConfiguration
+enum TrackingType
 {
     OrientationTracking,
-    WorldTracking,
-    WorldTrackingWithHorizontalPlaneDetection,
-    WorldTrackingWithVerticalPlaneDetection,
-    ReferenceImageTrackingConfiguration,
+    WorldTracking
+};
+
+enum PlaneDetection
+{
+    None,
+    Horizontal,
+    Vertical,
+};
+
+
+class SessionConfiguration
+{
+public:
+    SessionConfiguration(){}
+    
+    SessionConfiguration& trackingType( TrackingType newType )           { mTrackingType = newType; return *this; }
+    SessionConfiguration& planeDetection( PlaneDetection detectionType ) { mPlaneDetection = detectionType; return *this; }
+    SessionConfiguration& imageTrackingEnabled( bool enabled )           { mImageTrackingEnabled = enabled; return *this; }
+    
+
+    TrackingType          mTrackingType = TrackingType::WorldTracking;
+    PlaneDetection        mPlaneDetection = PlaneDetection::None;
+    bool                  mImageTrackingEnabled = false;
 };
 
 
@@ -32,7 +52,7 @@ public:
     SessionImpl();
     ~SessionImpl();
     
-    void runConfiguration( TrackingConfiguration config );
+    void runConfiguration( SessionConfiguration config );
     void pause();
     
     /**  Adds an anchor point to the ARSession relative to the current world orientation.

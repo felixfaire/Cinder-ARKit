@@ -14,7 +14,7 @@ Session::Session()
     mYCbCrToRGBProg = createCameraRGBProg();
 }
 
-void Session::runConfiguration( TrackingConfiguration config )      { mSessionImpl.runConfiguration( config ); }
+void Session::runConfiguration( SessionConfiguration config )       { mSessionImpl.runConfiguration( config ); }
 void Session::pause()                                               { mSessionImpl.pause(); }
 const AnchorID Session::addAnchorRelativeToWorld( vec3 position )   { return mSessionImpl.addAnchorRelativeToWorld( position ); }
 const AnchorID Session::addAnchorRelativeToCamera( vec3 offset )    { return mSessionImpl.addAnchorRelativeToCamera( offset ); }

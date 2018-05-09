@@ -30,7 +30,7 @@ public:
     
     /**  Starts the ARSession with a configuration
     */
-    void runConfiguration( TrackingConfiguration config );
+    void runConfiguration( SessionConfiguration config );
     
     /**  Pauses the session
     */
@@ -101,6 +101,8 @@ public:
 
 private:
 
+    /**  Creates the shaders to draw RGB camera capture
+    */
     static gl::GlslProgRef  createCameraRGBProg();
 
     // Internally handles bridge to objective-c

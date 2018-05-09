@@ -21,7 +21,10 @@ class BasicSampleApp : public App {
 
 void BasicSampleApp::setup()
 {
-    const auto config = ARKit::TrackingConfiguration::WorldTrackingWithHorizontalPlaneDetection;
+    auto config = ARKit::SessionConfiguration()
+                        .trackingType( ARKit::TrackingType::WorldTracking )
+                        .planeDetection( ARKit::PlaneDetection::Horizontal );
+    
     mARSession.runConfiguration( config );
 }
 
