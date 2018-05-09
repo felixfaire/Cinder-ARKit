@@ -45,6 +45,23 @@ public:
     vec3            mCenter;
     vec3            mExtent;
 };
+    
+class ImageAnchor
+{
+public:
+    ImageAnchor(){}
+    ImageAnchor(  std::string uid, mat4 transform, vec2 physicalSize, std::string imageName )
+    : mUid( uid ),
+    mTransform( transform ),
+    mPhysicalSize( physicalSize ),
+    mImageName (imageName){}
+    
+    AnchorID        mUid;
+    mat4 mTransform;
+    vec2 mPhysicalSize;
+    std::string mImageName;
+    
+};
 
 } // namespace ARKit
 

@@ -54,6 +54,10 @@ public:
     /**  Get the list of plane anchor objects
     */
     const std::vector<PlaneAnchor>& getPlaneAnchors() const;
+  
+    /**  Get the list of image anchor objects
+     */
+    const std::vector<ImageAnchor>& getImageAnchors() const;
     
     /**  Finds the anchor with a certain ID if it exists. Returns an empty
          std::shared_ptr<Anchor> if it doesn't exist.

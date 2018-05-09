@@ -21,6 +21,7 @@ enum TrackingConfiguration
     WorldTracking,
     WorldTrackingWithHorizontalPlaneDetection,
     WorldTrackingWithVerticalPlaneDetection,
+    ReferenceImageTrackingConfiguration,
 };
 
 
@@ -51,6 +52,7 @@ public:
     
     std::vector<Anchor>       mAnchors;
     std::vector<PlaneAnchor>  mPlaneAnchors;
+    std::vector<ImageAnchor>  mImageAnchors;
     
     bool                   mRGBCaptureEnabled = true;
     Channel8u              mFrameYChannel;
