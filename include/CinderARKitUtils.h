@@ -128,11 +128,15 @@ static ARConfiguration* getNativeARConfiguration( ARKit::SessionConfiguration co
 
 static cinder::Channel8u getChannelForCVPixelBuffer( const CVPixelBufferRef& pixelBuffer, int planeIndex, int increment = 1, int offset = 0 )
 {
+    CVPixelBufferLockBaseAddress( pixelBuffer, kCVPixelBufferLock_ReadOnly );
     uint8_t* data = (uint8_t*)CVPixelBufferGetBaseAddressOfPlane( pixelBuffer, planeIndex );
     const size_t bytesPerRow = CVPixelBufferGetBytesPerRowOfPlane( pixelBuffer, planeIndex );
     const size_t width = CVPixelBufferGetWidthOfPlane( pixelBuffer, planeIndex );
     const size_t height = CVPixelBufferGetHeightOfPlane( pixelBuffer, planeIndex );
-    return cinder::Channel8u( (int32_t)width, (int32_t)height, (int32_t)bytesPerRow, increment, data + offset );
+    const auto channel = cinder::Channel8u( (int32_t)width, (int32_t)height, (int32_t)bytesPerRow, increment, data + offset );
+    CVPixelBufferUnlockBaseAddress( pixelBuffer, kCVPixelBufferLock_ReadOnly );
+    
+    return channel;
 }
 
 } // namespace ARKit
